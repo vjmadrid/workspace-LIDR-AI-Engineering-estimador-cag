@@ -3,10 +3,17 @@
 # ============================================
 
 # =====================
+# App Configuration
+# =====================
+
+# Main file to run the application
+MAIN_FILE := app/main.py
+
+# =====================
 # General Configuration
 # =====================
 
-# Variables
+# Commands
 UV = uv
 PYTHON = $(UV) run python
 
@@ -50,6 +57,9 @@ install: ## Create the virtual environment and install dependencies
 # =====================
 # Execution
 # =====================
+
+run: ## Run Application
+	$(UV) run $(MAIN_FILE)
 
 run-script: ## Run a script: make run script=main.py
 	$(UV) run $(script)
