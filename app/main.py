@@ -1,9 +1,16 @@
+import logging
 from fastapi import FastAPI
 
-app = FastAPI(
-    title="Estimador CAG",
-    version="0.1.0",
+# =====================
+# Logging Configuration
+# =====================
+
+logging.basicConfig(
+    level="DEBUG",
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
 )
+logger = logging.getLogger(__name__)
 
 def create_app() -> FastAPI:
     """
@@ -21,4 +28,5 @@ app = create_app()
 
 @app.get("/")
 def root():
+    logger.info("Execute root endpoint")
     return {"message": "Hello from estimador-cag!"}
