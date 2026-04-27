@@ -10,12 +10,20 @@
 MAIN_FILE := app/main.py
 
 # =====================
+# Uvicorn Configuration
+# =====================
+
+# Uvicorn entry point for running the application
+UVICORN_START_FILE := app.main:app
+
+# =====================
 # General Configuration
 # =====================
 
 # Commands
 UV = uv
 PYTHON = $(UV) run python
+UVICORN = uvicorn
 
 # =====================
 # Help
@@ -59,9 +67,12 @@ install: ## Create the virtual environment and install dependencies
 # =====================
 
 run: ## Run Application
-	$(UV) run $(MAIN_FILE)
+	$(PYTHON) -m app.main
 
 run-script: ## Run a script: make run script=main.py
 	$(UV) run $(script)
+
+run-uvicorn: ## Run Application with Uvicorn
+	$(UVICORN) $(UVICORN_START_FILE) --reload
 
 .DEFAULT_GOAL := help
