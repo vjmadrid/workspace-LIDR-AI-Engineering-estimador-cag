@@ -24,6 +24,7 @@ Para ello se harña uso de uan arquitectura CAG (Cache Augmente Generation)
 
 * Python 3 (>=3.11) instalado
 * uv instalado
+* Soporte a Makefile
 * Cuenta activa en OpenAI Platform y/ Anthropic Console con creditos disponibles
 * API key de OpenAI y/o Anthropic como variables de entorno
 
