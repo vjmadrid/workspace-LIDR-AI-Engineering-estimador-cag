@@ -13,7 +13,16 @@
 
 ## Información general
 
+Proyecto para controlar las estimaciones de los proyectos de un empresa, con el fin de mejorar la planificación y gestión de los recursos.
+
+Para ello se harña uso de uan arquitectura CAG (Cache Augmente Generation)
+
 ## Stack Tecnológico
+
+* Python 3 (>=3.11) instalado
+* uv instalado
+* Cuenta activa en OpenAI Platform y/ Anthropic Console con creditos disponibles
+* API key de OpenAI y/o Anthropic como variables de entorno
 
 ### General
 
