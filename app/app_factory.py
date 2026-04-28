@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from app.config import get_settings
 from app.api.manager.routes import router as manager_router
 from app.api.manager.routes import router as basic_router
+from app.routers.estimations import router as estimation_router
 
 logger = logging.getLogger(__name__)
 
@@ -28,5 +29,6 @@ def create_app() -> FastAPI:
     # Include API routers
     app.include_router(manager_router)
     app.include_router(basic_router)
+    app.include_router(estimation_router)
 
     return app

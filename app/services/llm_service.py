@@ -14,7 +14,7 @@ SYSTEM_PROMPT = (
     "Sigue el formato y el nivel de detalle de los ejemplos proporcionados."
 )
 
-def estimate_from_transcript(transcript: str, model: str = "gpt-4o") -> str:
+def estimate_from_transcript(transcript: str, model: str = "gpt-4o-mini") -> str:
     """
     Envía la transcripción y el contexto a OpenAI y devuelve la estimación generada.
     """

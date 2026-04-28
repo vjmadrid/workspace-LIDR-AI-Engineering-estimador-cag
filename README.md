@@ -69,6 +69,10 @@ N/A
   * [Repositorio](https://github.com/pydantic/pydantic-settings)
   * [Documentacion](https://pydantic.dev/docs/validation/latest/concepts/pydantic_settings/)
   * [Web](https://pydantic.dev/docs/)
+* **pipdeptree** : Utilidad de línea de domandos para mostrar el arbol de dependencias
+  * [Pypi](https://pypi.org/project/pipdeptree/)
+  * [Repositorio](https://github.com/naiquevin/pipdeptree)
+  * [Documentacion](https://pypi.org/project/pipdeptree/)
 
 
 ## Pre-Requisitos
@@ -121,6 +125,7 @@ uv add "uvicorn[standard]"
 uv add openai
 uv add anthropic
 uv add pydantic-settings
+uv add pipdeptree
 ```
 
 ## Uso

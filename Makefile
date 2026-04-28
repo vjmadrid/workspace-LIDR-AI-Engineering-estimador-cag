@@ -55,6 +55,12 @@ init-venv: ## Prepare Local Virtual Environment
 sync-venv: ## Synchronise the virtual environment with the file pyproject.toml
 	$(UV) sync
 
+tree: ## Show dependency tree of packages
+	$(UV) run python -m pipdeptree
+
+tree-json: ## Show dependency tree of packages json
+	$(UV) run python -m pipdeptree --json-tree
+
 # =====================
 # Installation
 # =====================
