@@ -12,6 +12,7 @@
     - [Instalación de dependencias](#instalación-de-dependencias)
   - [Uso](#uso)
     - [Problema "Address already in use"](#problema-address-already-in-use)
+    - [Ejemplo de curl](#ejemplo-de-curl)
   - [Versionado](#versionado)
   - [Autores](#autores)
 
@@ -27,6 +28,7 @@ Para ello se harña uso de uan arquitectura CAG (Cache Augmente Generation)
 * Python 3 (>=3.11) instalado
 * uv instalado
 * Soporte a Makefile
+* Soporte a cURL
 * Cuenta activa en OpenAI Platform y/ Anthropic Console con creditos disponibles
 * API key de OpenAI y/o Anthropic como variables de entorno
 
@@ -82,6 +84,7 @@ N/A
 
 * Python 3 (>=3.11) instalado
 * uv instalado
+* cURL instalado
 * Cuenta activa en OpenAI Platform y/ Anthropic Console con creditos disponibles
 * API key de OpenAI y/o Anthropic como variables de entorno
 
@@ -148,6 +151,18 @@ lsof -i :8000
 
 ```bash
 kill -9 <PID>
+```
+
+### Ejemplo de curl
+
+```bash
+curl -X 'POST' \
+  'http://127.0.0.1:8000/api/v1/estimate' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "transcription": "El cliente solicita una aplicación móvil para gestionar reservas de salas de reuniones en una empresa. La app debe permitir a los empleados ver la disponibilidad, reservar, cancelar y recibir notificaciones. Se requiere autenticación corporativa, integración con el calendario de Outlook y panel de administración web para métricas."
+}'
 ```
 
 ## Versionado
