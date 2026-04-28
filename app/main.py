@@ -19,6 +19,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 def create_app() -> FastAPI:
+    from app.api.manager.routes import router as manager_router
+
     """
     Factory function to create and configure the FastAPI application
     This allows for better modularity and testing
@@ -28,6 +30,10 @@ def create_app() -> FastAPI:
         version="0.1.0",
         description="API para generar estimaciones de proyectos de software basadas en resúmenes de reuniones."
     )
+
+    # Include API routers
+    app.include_router(manager_router)
+
     return app
 
 app = create_app()
