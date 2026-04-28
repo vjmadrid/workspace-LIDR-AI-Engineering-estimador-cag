@@ -73,7 +73,10 @@ N/A
   * [Pypi](https://pypi.org/project/pipdeptree/)
   * [Repositorio](https://github.com/naiquevin/pipdeptree)
   * [Documentacion](https://pypi.org/project/pipdeptree/)
-
+* **tiktoken** : Utilidad para contar tokens en modelos de OpenAI
+  * [Pypi](https://pypi.org/project/tiktoken/)
+  * [Repositorio](https://github.com/openai/tiktoken)
+  * [Documentacion](https://github.com/openai/tiktoken)
 
 ## Pre-Requisitos
 
@@ -126,6 +129,7 @@ uv add openai
 uv add anthropic
 uv add pydantic-settings
 uv add pipdeptree
+uv add tiktoken
 ```
 
 ## Uso
