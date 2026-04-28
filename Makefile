@@ -70,7 +70,10 @@ run: ## Run Application
 	$(PYTHON) -m app.main
 
 run-script: ## Run a script: make run script=main.py
-	$(UV) run $(script)
+	PYTHONPATH=app $(UV) run $(script)
+
+run-demo: ## Run the demo script
+	PYTHONPATH=$(CURDIR) $(PYTHON) scripts/estimate_demo.py
 
 run-uvicorn: ## Run Application with Uvicorn
 	$(UVICORN) $(UVICORN_START_FILE) --reload
