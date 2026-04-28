@@ -8,7 +8,7 @@ from app.context.utils import build_context_examples
 from app.context.examples import ESTIMATION_EXAMPLES
 
 from app.api.estimate.constants import OPENAI_MODEL_DEFAULT
-from app.api.estimate.schemas import EstimateResponse
+from app.api.estimate.dtos import EstimateResponseDTO
 from app.core.token.utils import OpenAITokenUtil
 
 
@@ -55,8 +55,9 @@ class EstimateService:
         print(f"[INFO] Tokens completados (respuesta): {response.usage.completion_tokens}")
         print(f"[INFO] Tokens totales: {response.usage.total_tokens}")
 
-        return EstimateResponse(
+        return EstimateResponseDTO(
             response=response.choices[0].message.content.strip(),
+            llm_model= model,
             num_tokens_input=response.usage.prompt_tokens,
             num_tokens_response=response.usage.completion_tokens,
             num_tokens_total=response.usage.total_tokens
