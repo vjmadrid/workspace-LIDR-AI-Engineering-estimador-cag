@@ -4,7 +4,6 @@ from app.config import get_settings
 
 from app.api.estimate.prompts import SYSTEM_PROMPT
 
-from app.context.utils import build_context_examples
 from app.context.examples import ESTIMATION_EXAMPLES
 
 from app.api.estimate.constants import OPENAI_MODEL_DEFAULT
@@ -66,8 +65,9 @@ class EstimateService:
 
         # Build response DTO
         return EstimateResponseDTO(
-            response=response.choices[0].message.content.strip(),
+            llm_provider=settings.LLM_MODEL,
             llm_model= model,
+            response=response.choices[0].message.content.strip(),
             num_tokens_input=response.usage.prompt_tokens,
             num_tokens_response=response.usage.completion_tokens,
             num_tokens_total=response.usage.total_tokens,

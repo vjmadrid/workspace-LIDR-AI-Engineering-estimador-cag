@@ -17,6 +17,7 @@ class EstimateMetadataResponse(BaseModel):
     token_metadata: EstimateTokenMetadataResponse | None = None
     cost_metadata: EstimateCostMetadataResponse | None = None
 class EstimateResponse(BaseModel):
+    provider: str
     llm_model: str
     estimation: str = Field(..., description="Estimación generada por el modelo")
     metadata: EstimateMetadataResponse | None = None
@@ -45,6 +46,7 @@ def generate_estimate_response(estimate: EstimateResponseDTO):
     )
 
     return EstimateResponse(
+        provider=estimate.llm_provider,
         llm_model=estimate.llm_model,
         estimation=estimate.response,
         metadata=metadata

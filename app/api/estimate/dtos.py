@@ -1,8 +1,9 @@
 from pydantic import BaseModel
 
 class EstimateResponseDTO(BaseModel):
-    response: str
+    llm_provider: str
     llm_model: str
+    response: str
     num_tokens_input: int
     num_tokens_response: int
     num_tokens_total: int
