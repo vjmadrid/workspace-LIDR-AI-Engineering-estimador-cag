@@ -2,6 +2,8 @@ import logging
 from fastapi import FastAPI
 
 from app.config import get_settings
+from app.api.manager.routes import router as manager_router
+from app.api.manager.routes import router as basic_router
 
 
 # =====================
@@ -19,20 +21,20 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 def create_app() -> FastAPI:
-    from app.api.manager.routes import router as manager_router
 
     """
     Factory function to create and configure the FastAPI application
     This allows for better modularity and testing
     """
     app = FastAPI(
-        title="Estimador CAG",
+        title=settings.APP_NAME,
         version="0.1.0",
         description="API para generar estimaciones de proyectos de software basadas en resúmenes de reuniones."
     )
 
     # Include API routers
     app.include_router(manager_router)
+    app.include_router(basic_router)
 
     return app
 
@@ -40,7 +42,3 @@ app = create_app()
 
 logger.info("APP_ENV: %s", settings.APP_ENV.value)
 
-@app.get("/")
-def root():
-    logger.info("Execute root endpoint")
-    return {"message": "Hello from estimador-cag!"}

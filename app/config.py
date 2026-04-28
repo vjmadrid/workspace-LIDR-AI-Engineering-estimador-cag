@@ -37,6 +37,7 @@ class Settings(BaseSettings):
     # General Settings
     SERVICE_HOST: str = "0.0.0.0"
     SERVICE_PORT: int = 8000
+    APP_NAME: str = "estimador-cag-default"
     APP_ENV: AppEnvironment = AppEnvironment.DEVELOPMENT
     LOG_LEVEL: str = logging.INFO
 
