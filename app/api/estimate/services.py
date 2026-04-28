@@ -9,7 +9,9 @@ from app.context.examples import ESTIMATION_EXAMPLES
 
 from app.api.estimate.constants import OPENAI_MODEL_DEFAULT
 from app.api.estimate.dtos import EstimateResponseDTO
+
 from app.core.token.utils import OpenAITokenUtil
+from app.core.cost.utils import OpenAICostUtil
 
 
 settings = get_settings()
@@ -55,12 +57,21 @@ class EstimateService:
         print(f"[INFO] Tokens completados (respuesta): {response.usage.completion_tokens}")
         print(f"[INFO] Tokens totales: {response.usage.total_tokens}")
 
+        # Calculate token costs
+        token_costs = OpenAICostUtil.calculate_cost(
+            model=model,
+            input_tokens=response.usage.prompt_tokens,
+            output_tokens=response.usage.completion_tokens
+        )
+
+        # Build response DTO
         return EstimateResponseDTO(
             response=response.choices[0].message.content.strip(),
             llm_model= model,
             num_tokens_input=response.usage.prompt_tokens,
             num_tokens_response=response.usage.completion_tokens,
-            num_tokens_total=response.usage.total_tokens
+            num_tokens_total=response.usage.total_tokens,
+            input_token_cost=token_costs.input_token_cost,
+            output_token_cost=token_costs.output_token_cost,
+            total_token_cost=token_costs.total_token_cost
         )
-
-        return response_value

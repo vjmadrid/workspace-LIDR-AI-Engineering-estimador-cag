@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException
 
 from app.api.estimate.constants import ESTIMATE_ENDPOINT
 from app.api.estimate.requests import EstimateRequest
-from app.api.estimate.responses import EstimateResponse, EstimateMetadata
+from app.api.estimate.responses import EstimateResponse, generate_estimate_response
 from app.api.estimate.services import EstimateService
 
 # Logging Configuration
@@ -22,19 +22,8 @@ async def estimate_endpoint(payload: EstimateRequest) :
     if not payload.transcription.strip():
         raise HTTPException(status_code=400, detail="The 'transcription' field must not be empty")
 
-    estimation = estimateService.estimate_from_transcript(payload.transcription)
-    logger.info("Estimation result: %s", estimation)
+    response = estimateService.estimate_from_transcript(payload.transcription)
+    logger.info("Estimation result: %s", response)
 
     # Build response
-
-    metadata = EstimateMetadata(
-        llm_model=estimation.llm_model,
-        num_tokens_input=estimation.num_tokens_input,
-        num_tokens_response=estimation.num_tokens_response,
-        num_tokens_total=estimation.num_tokens_total
-    )
-
-    return EstimateResponse(
-        estimation=estimation.response,
-        metadata=metadata
-    )
+    return generate_estimate_response(response)

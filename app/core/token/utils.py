@@ -1,7 +1,7 @@
 
 import tiktoken
 
-from app.core.token.constants import DEFAULT_OPENAI_MODEL
+from app.core.openai.constants import DEFAULT_OPENAI_MODEL
 
 
 class OpenAITokenUtil:
