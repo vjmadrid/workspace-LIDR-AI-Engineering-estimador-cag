@@ -10,6 +10,8 @@
   - [Instalación](#instalación)
     - [Instalación de entorno virtual](#instalación-de-entorno-virtual)
     - [Instalación de dependencias](#instalación-de-dependencias)
+  - [Uso](#uso)
+    - [Problema "Address already in use"](#problema-address-already-in-use)
   - [Versionado](#versionado)
   - [Autores](#autores)
 
@@ -62,6 +64,12 @@ N/A
   * [Repositorio](https://github.com/theskumar/python-dotenv)
   * [Documentacion](https://saurabh-kumar.com/python-dotenv/)
   * [Web](https://saurabh-kumar.com/python-dotenv/)
+* **pydantic-settings** : Utilidad que facilita trabajar con configuraciones basadas en Pydantic
+  * [Pypi](https://pypi.org/project/pydantic-settings/)
+  * [Repositorio](https://github.com/pydantic/pydantic-settings)
+  * [Documentacion](https://pydantic.dev/docs/validation/latest/concepts/pydantic_settings/)
+  * [Web](https://pydantic.dev/docs/)
+
 
 ## Pre-Requisitos
 
@@ -112,6 +120,25 @@ uv add fastapi
 uv add "uvicorn[standard]"
 uv add openai
 uv add anthropic
+uv add pydantic-settings
+```
+
+## Uso
+
+### Problema "Address already in use"
+
+Pasos a seguir:
+
+* Identificar el proceso que esta utilizando el puerto 8000
+
+```bash
+lsof -i :8000
+```
+
+* Matar el proceso identificado (reemplazar <PID> por el PID del proceso)
+
+```bash
+kill -9 <PID>
 ```
 
 ## Versionado
