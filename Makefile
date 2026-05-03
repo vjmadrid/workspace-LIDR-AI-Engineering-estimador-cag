@@ -40,6 +40,7 @@ clean: ## Remove elements for build
 	@rm -rf .venv
 	@rm -rf .pytest_cache
 	@find . -type d -name "__pycache__" -exec rm -rf {} +
+	@rm -rf .ruff_cache
 
 # =====================
 # Virtual Environment
