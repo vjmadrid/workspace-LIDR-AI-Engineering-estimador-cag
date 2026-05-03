@@ -1,0 +1,9 @@
+{
+  "name": "estimate_empty_input",
+  "input": {
+    "transcription": "   "
+  },
+  "expected_error": {
+    "status_code": 422
+  }
+}

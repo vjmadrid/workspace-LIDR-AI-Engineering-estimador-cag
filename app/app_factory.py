@@ -1,10 +1,10 @@
 import logging
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_settings
-from app.api.manager.routes import router as manager_router
-from app.api.manager.routes import router as basic_router
-from app.api.estimate.routes import router as estimation_router
+from app.routers.manager_routes import router as manager_router
+from app.routers.estimate_routes import router as estimation_router
 
 logger = logging.getLogger(__name__)
 
@@ -26,9 +26,17 @@ def create_app() -> FastAPI:
 
     logger.info("APP_ENV: %s", settings.APP_ENV.value)
 
-    # Include API routers
+    # Add CORS Support
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
+    # Add API routers
     app.include_router(manager_router)
-    app.include_router(basic_router)
     app.include_router(estimation_router)
 
     return app

@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EstimateResponse",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["provider", "llm_model", "estimation"],
+  "properties": {
+    "provider": {
+      "type": "string"
+    },
+    "llm_model": {
+      "type": "string"
+    },
+    "estimation": {
+      "type": "string",
+      "description": "Estimación generada por el modelo"
+    },
+    "metadata": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "token_metadata": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "num_tokens_input",
+                    "num_tokens_response",
+                    "num_tokens_total"
+                  ],
+                  "properties": {
+                    "num_tokens_input": { "type": "integer" },
+                    "num_tokens_response": { "type": "integer" },
+                    "num_tokens_total": { "type": "integer" }
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "cost_metadata": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "input_token_cost",
+                    "output_token_cost",
+                    "total_token_cost"
+                  ],
+                  "properties": {
+                    "input_token_cost": { "type": "number" },
+                    "output_token_cost": { "type": "number" },
+                    "total_token_cost": { "type": "number" }
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  }
+}

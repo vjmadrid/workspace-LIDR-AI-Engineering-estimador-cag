@@ -1,22 +1,30 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
-from app.api.estimate.dtos import EstimateResponseDTO
+from app.dtos.estimate_dtos import EstimateResponseDTO
 
 # =====================
 # Responses (BaseModel)
 # =====================
 class EstimateTokenMetadataResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     num_tokens_input: int
     num_tokens_response: int
     num_tokens_total: int
 class EstimateCostMetadataResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     input_token_cost: float
     output_token_cost: float
     total_token_cost: float
 class EstimateMetadataResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     token_metadata: EstimateTokenMetadataResponse | None = None
     cost_metadata: EstimateCostMetadataResponse | None = None
 class EstimateResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     provider: str
     llm_model: str
     estimation: str = Field(..., description="Estimación generada por el modelo")

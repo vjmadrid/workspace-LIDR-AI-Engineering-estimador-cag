@@ -85,4 +85,7 @@ run-demo: ## Run the demo script
 run-uvicorn: ## Run Application with Uvicorn
 	$(UVICORN) $(UVICORN_START_FILE) --reload
 
+test: ## Run spec-driven tests
+	$(CURDIR)/.venv/bin/python -m unittest discover -s tests
+
 .DEFAULT_GOAL := help

@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EstimateRequest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["transcription"],
+  "properties": {
+    "transcription": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Texto de la transcripción de la reunión"
+    }
+  }
+}

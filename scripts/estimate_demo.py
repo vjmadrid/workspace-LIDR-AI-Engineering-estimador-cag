@@ -1,4 +1,4 @@
-from app.api.estimate.services import EstimateService
+from app.services.estimate_services import EstimateService
 
 estimateService = EstimateService()
 

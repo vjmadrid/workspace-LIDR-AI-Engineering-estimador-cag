@@ -1,0 +1,23 @@
+{
+  "name": "estimate_success",
+  "input": {
+    "transcription": "El cliente necesita una aplicación web para reservar salas de reuniones, consultar disponibilidad, cancelar reservas y enviar notificaciones. Debe integrarse con el calendario corporativo y tener panel de administración."
+  },
+  "expected_response": {
+    "provider": "openai",
+    "llm_model": "gpt-4o-mini",
+    "estimation": "## Estimación\n\n1. Descubrimiento y alcance: 8 horas\n2. UX/UI: 16 horas\n3. API backend: 24 horas\n4. Integración con calendario: 16 horas\n5. Notificaciones: 8 horas\n\n**Total estimado: 72 horas**",
+    "metadata": {
+      "token_metadata": {
+        "num_tokens_input": 120,
+        "num_tokens_response": 90,
+        "num_tokens_total": 210
+      },
+      "cost_metadata": {
+        "input_token_cost": 0.000018,
+        "output_token_cost": 0.000054,
+        "total_token_cost": 0.000072
+      }
+    }
+  }
+}

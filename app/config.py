@@ -42,9 +42,11 @@ class Settings(BaseSettings):
     LOG_LEVEL: str = logging.INFO
 
     # LLM Settings
+    LLM_PROVIDER: LLMProvider = LLMProvider.OPENAI
+    LLM_MODEL_OPENAI: str = "gpt-4o-mini"
+
     OPENAI_API_KEY: str = ""
     ANTHROPIC_API_KEY: str = ""
-    LLM_MODEL: LLMProvider = LLMProvider.OPENAI
 
     @property
     def is_production(self) -> bool:
