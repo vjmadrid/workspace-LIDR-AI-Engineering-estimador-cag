@@ -31,6 +31,7 @@ Para ello se harña uso de uan arquitectura CAG (Cache Augmente Generation)
 * Soporte a cURL
 * Cuenta activa en OpenAI Platform y/ Anthropic Console con creditos disponibles
 * API key de OpenAI y/o Anthropic como variables de entorno
+* Docker y Docker Compose
 
 ### General
 
@@ -91,6 +92,7 @@ N/A
 * cURL instalado
 * Cuenta activa en OpenAI Platform y/ Anthropic Console con creditos disponibles
 * API key de OpenAI y/o Anthropic como variables de entorno
+* Docker y Docker Compose instalados
 
 ## Instalación
 

@@ -120,5 +120,21 @@ fix: ## Run Ruff formatter with fixes
 test: ## Run spec-driven tests
 	$(CURDIR)/.venv/bin/python -m unittest discover -s tests
 
+# =====================
+# Docker
+# =====================
+
+docker-build:
+	docker compose build
+
+docker-up:
+	docker compose up --build
+
+docker-down:
+	docker compose down
+
+docker-logs:
+	docker compose logs -f estimator
+
 
 .DEFAULT_GOAL := help
