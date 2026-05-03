@@ -79,6 +79,10 @@ N/A
   * [Pypi](https://pypi.org/project/tiktoken/)
   * [Repositorio](https://github.com/openai/tiktoken)
   * [Documentacion](https://github.com/openai/tiktoken)
+* **ruff** : Utilidad para analizar y formatear código Python
+  * [Pypi](https://pypi.org/project/ruff/)
+  * [Repositorio](https://github.com/astral-sh/ruff)
+  * [Documentacion](https://docs.astral.sh/ruff/)
 
 ## Pre-Requisitos
 
