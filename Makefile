@@ -48,6 +48,15 @@ clean: ## Remove elements for build
 init-venv: ## Prepare Local Virtual Environment
 	$(UV) venv
 
+activate-venv: ## Activate the virtual environment
+	@echo "To activate the virtual environment, run: source .venv/bin/activate"
+	source .venv/bin/activate
+
+verify-venv: ## Verify the virtual environment is active
+	@echo "To verify the virtual environment is active, run: which python"
+	which python
+
+
 # =====================
 # Dependencies
 # =====================

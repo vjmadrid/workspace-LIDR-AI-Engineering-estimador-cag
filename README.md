@@ -125,6 +125,7 @@ which python
 Instalación de dependencias de forma manual
 
 ```bash
+# General
 uv add python-dotenv
 uv add fastapi
 uv add "uvicorn[standard]"
@@ -133,6 +134,9 @@ uv add anthropic
 uv add pydantic-settings
 uv add pipdeptree
 uv add tiktoken
+
+# Desarrollo
+uv add --dev ruff
 ```
 
 ## Uso
