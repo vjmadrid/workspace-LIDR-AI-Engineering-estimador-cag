@@ -1,5 +1,6 @@
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
+
 class EstimateRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 

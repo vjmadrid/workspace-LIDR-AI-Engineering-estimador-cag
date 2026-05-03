@@ -1,6 +1,6 @@
 import json
-from pathlib import Path
 import unittest
+from pathlib import Path
 
 from fastapi.testclient import TestClient
 
@@ -9,7 +9,6 @@ from app.dtos.estimate_dtos import EstimateResponseDTO
 from app.requests.estimate_requests import EstimateRequest
 from app.response.estimate_responses import generate_estimate_response
 from app.services.estimate_prompt_builder import EstimatePromptBuilder
-
 
 ROOT_DIR = Path(__file__).resolve().parents[2]
 SPECS_DIR = ROOT_DIR / "specs"
@@ -29,10 +28,14 @@ class EstimateScenarioTests(unittest.TestCase):
             llm_model=expected["llm_model"],
             response=expected["estimation"],
             num_tokens_input=expected["metadata"]["token_metadata"]["num_tokens_input"],
-            num_tokens_response=expected["metadata"]["token_metadata"]["num_tokens_response"],
+            num_tokens_response=expected["metadata"]["token_metadata"][
+                "num_tokens_response"
+            ],
             num_tokens_total=expected["metadata"]["token_metadata"]["num_tokens_total"],
             input_token_cost=expected["metadata"]["cost_metadata"]["input_token_cost"],
-            output_token_cost=expected["metadata"]["cost_metadata"]["output_token_cost"],
+            output_token_cost=expected["metadata"]["cost_metadata"][
+                "output_token_cost"
+            ],
             total_token_cost=expected["metadata"]["cost_metadata"]["total_token_cost"],
         )
 

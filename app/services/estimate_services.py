@@ -10,7 +10,6 @@ from app.dtos.estimate_dtos import EstimateResponseDTO
 from app.exceptions.estimate_exceptions import EstimateServiceException
 from app.services.estimate_prompt_builder import EstimatePromptBuilder
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -50,10 +49,14 @@ class EstimateService:
             )
         except Exception as exc:
             logger.exception("Error while generating estimation")
-            raise EstimateServiceException("An error occurred while generating the estimation") from exc
+            raise EstimateServiceException(
+                "An error occurred while generating the estimation"
+            ) from exc
 
         if response.usage is None:
-            raise EstimateServiceException("The LLM response did not include token usage metadata")
+            raise EstimateServiceException(
+                "The LLM response did not include token usage metadata"
+            )
 
         response_content = response.choices[0].message.content
         if not response_content:

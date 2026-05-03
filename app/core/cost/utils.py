@@ -1,6 +1,6 @@
+from app.core.cost.dtos import TokenCostResponseDTO
 from app.core.openai.constants import DEFAULT_OPENAI_MODEL
 
-from app.core.cost.dtos import TokenCostResponseDTO
 
 class OpenAICostUtil:
     # OpenAI (USD per 1M tokens)
@@ -32,7 +32,7 @@ class OpenAICostUtil:
             llm_model=model,
             input_token_cost=input_token_cost,
             output_token_cost=output_token_cost,
-            total_token_cost=total_token_cost
+            total_token_cost=total_token_cost,
         )
 
         return response_dto

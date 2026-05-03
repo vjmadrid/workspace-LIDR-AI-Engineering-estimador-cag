@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 
+
 class EstimateResponseDTO(BaseModel):
     llm_provider: str
     llm_model: str

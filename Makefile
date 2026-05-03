@@ -94,7 +94,30 @@ run-demo: ## Run the demo script
 run-uvicorn: ## Run Application with Uvicorn
 	$(UVICORN) $(UVICORN_START_FILE) --reload
 
+# =====================
+# Linter
+# =====================
+
+lint: ## Run Ruff linter
+	$(UV) run ruff check .
+
+# =====================
+# Formatter
+# =====================
+
+format: ## Run Ruff formatter
+	$(UV) run ruff format .
+
+fix: ## Run Ruff formatter with fixes
+	$(UV) run ruff check . --fix
+	$(UV) run ruff format .
+
+# =====================
+# Testing
+# =====================
+
 test: ## Run spec-driven tests
 	$(CURDIR)/.venv/bin/python -m unittest discover -s tests
+
 
 .DEFAULT_GOAL := help

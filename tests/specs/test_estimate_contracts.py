@@ -1,10 +1,9 @@
 import json
-from pathlib import Path
 import unittest
+from pathlib import Path
 
 from app.requests.estimate_requests import EstimateRequest
 from app.response.estimate_responses import EstimateResponse
-
 
 ROOT_DIR = Path(__file__).resolve().parents[2]
 SPECS_DIR = ROOT_DIR / "specs"
@@ -20,8 +19,14 @@ class EstimateContractTests(unittest.TestCase):
         schema = EstimateRequest.model_json_schema()
 
         self.assertEqual(spec["required"], schema["required"])
-        self.assertEqual(spec["properties"]["transcription"]["type"], schema["properties"]["transcription"]["type"])
-        self.assertEqual(spec["properties"]["transcription"]["minLength"], schema["properties"]["transcription"]["minLength"])
+        self.assertEqual(
+            spec["properties"]["transcription"]["type"],
+            schema["properties"]["transcription"]["type"],
+        )
+        self.assertEqual(
+            spec["properties"]["transcription"]["minLength"],
+            schema["properties"]["transcription"]["minLength"],
+        )
         self.assertEqual(spec["additionalProperties"], schema["additionalProperties"])
 
     def test_response_contract_matches_top_level_spec(self) -> None:

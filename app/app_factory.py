@@ -1,12 +1,14 @@
 import logging
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_settings
-from app.routers.manager_routes import router as manager_router
 from app.routers.estimate_routes import router as estimation_router
+from app.routers.manager_routes import router as manager_router
 
 logger = logging.getLogger(__name__)
+
 
 def create_app() -> FastAPI:
     """
@@ -21,7 +23,7 @@ def create_app() -> FastAPI:
     app = FastAPI(
         title=settings.APP_NAME,
         version="0.1.0",
-        description="API para generar estimaciones de proyectos de software basadas en resúmenes de reuniones."
+        description="API para generar estimaciones de proyectos de software basadas en resúmenes de reuniones.",
     )
 
     logger.info("APP_ENV: %s", settings.APP_ENV.value)

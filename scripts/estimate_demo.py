@@ -3,7 +3,6 @@ from app.services.estimate_services import EstimateService
 estimateService = EstimateService()
 
 if __name__ == "__main__":
-
     MESSAGE = (
         "El cliente solicita una aplicación móvil para gestionar reservas de salas de reuniones en una empresa. "
         "La app debe permitir a los empleados ver la disponibilidad, reservar, cancelar y recibir notificaciones. "
@@ -19,7 +18,9 @@ if __name__ == "__main__":
     # Estimate
     print("\nEnviando transcripción a LLM ...\n")
 
-    estimation = estimateService.estimate_from_transcript(transcript=MESSAGE, model="gpt-4o-mini")
+    estimation = estimateService.estimate_from_transcript(
+        transcript=MESSAGE, model="gpt-4o-mini"
+    )
 
     print("\n=== ESTIMACIÓN GENERADA ===\n")
     print(estimation.response)

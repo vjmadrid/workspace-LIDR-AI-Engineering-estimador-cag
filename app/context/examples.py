@@ -14,7 +14,7 @@ ESTIMATION_EXAMPLES = [
         **Total estimado: 175 horas**
         **Equipo recomendado: 2 desarrolladores full-stack + 1 diseñador UX (part-time)**
         **Duración estimada: 6-8 semanas**
-        """
+        """,
     },
     {
         "meeting_summary": "El cliente necesita implementar testing unitario e integración para un proyecto básico de gestión de passwords. El sistema incluye registro de usuarios, autenticación, cambio de contraseña, recuperación y políticas de seguridad (longitud mínima, complejidad, expiración). Se utiliza Python con FastAPI, base de datos PostgreSQL y hashing con bcrypt.",
@@ -48,7 +48,7 @@ ESTIMATION_EXAMPLES = [
         **Equipo recomendado: 1 QA engineer + 1 desarrollador backend**
         **Duración estimada: 4-5 semanas**
         **Cobertura objetivo: ≥ 85%**
-        """
+        """,
     },
     {
         "meeting_summary": "El cliente necesita migrar una base de datos básica de SQL Server a MySQL. La base de datos contiene aproximadamente 30 tablas con relaciones, stored procedures, vistas, triggers e índices. El volumen de datos es de unos 5 GB. Se requiere mantener la integridad referencial, minimizar el tiempo de inactividad y validar que los datos migrados sean correctos.",
@@ -91,9 +91,10 @@ ESTIMATION_EXAMPLES = [
         **Equipo recomendado: 1 DBA senior + 1 desarrollador backend**
         **Duración estimada: 5-7 semanas**
         **Tiempo de inactividad estimado: 2-4 horas (ventana de migración final)**
-        """
+        """,
     },
 ]
+
 
 def format_examples_for_prompt(examples: list[dict]) -> str:
     """Format estimation examples into a string suitable for injection into a system prompt."""

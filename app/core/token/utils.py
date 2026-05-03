@@ -1,4 +1,3 @@
-
 import tiktoken
 
 from app.core.openai.constants import DEFAULT_OPENAI_MODEL

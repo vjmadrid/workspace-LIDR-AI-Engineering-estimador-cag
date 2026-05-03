@@ -52,12 +52,15 @@ class Settings(BaseSettings):
     def is_production(self) -> bool:
         return self.APP_ENV == AppEnvironment.PRODUCTION
 
+
 class DevelopmentConfig(Settings):
     DEBUG: bool = True
     LOG_LEVEL: str = logging.DEBUG
 
+
 class TestingConfig(Settings):
     DEBUG: bool = False
+
 
 class ProductionConfig(Settings):
     DEBUG: bool = False

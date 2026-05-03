@@ -1,12 +1,14 @@
 import logging
+
 from fastapi import APIRouter
 
-from app.constants import manager_constants
 from app.config import get_settings
+from app.constants import manager_constants
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix=manager_constants.ROOT_ENDPOINT)
+
 
 @router.get(manager_constants.HEALTH_ENDPOINT, name="health")
 def health_manager():

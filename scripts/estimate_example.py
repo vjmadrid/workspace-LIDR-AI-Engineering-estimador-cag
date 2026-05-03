@@ -1,4 +1,5 @@
 import sys
+
 from app.services.estimate_services import estimate_from_transcript
 
 if __name__ == "__main__":

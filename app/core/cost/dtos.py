@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 
+
 class TokenCostResponseDTO(BaseModel):
     llm_model: str
     input_token_cost: float

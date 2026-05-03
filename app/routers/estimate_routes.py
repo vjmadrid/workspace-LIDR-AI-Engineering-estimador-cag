@@ -1,11 +1,12 @@
 import logging
+
 from fastapi import APIRouter, HTTPException
 
 from app.constants.estimate_constants import ESTIMATE_ENDPOINT
+from app.exceptions.estimate_exceptions import EstimateServiceException
 from app.requests.estimate_requests import EstimateRequest
 from app.response.estimate_responses import EstimateResponse, generate_estimate_response
 from app.services.estimate_services import EstimateService
-from app.exceptions.estimate_exceptions import EstimateServiceException
 
 # Logging Configuration
 logger = logging.getLogger(__name__)
@@ -16,15 +17,18 @@ estimateService = EstimateService()
 
 router = APIRouter(prefix="/api/v1", tags=["estimations"])
 
+
 @router.post(ESTIMATE_ENDPOINT, response_model=EstimateResponse)
-async def estimate_endpoint(request: EstimateRequest) :
+async def estimate_endpoint(request: EstimateRequest):
     logger.info("Estimate endpoint called")
 
     try:
         response = estimateService.estimate_from_transcript(request.transcription)
     except EstimateServiceException as e:
         logger.error("Error occurred while estimating: %s", str(e))
-        raise HTTPException(status_code=500, detail="An error occurred while processing the estimation")
+        raise HTTPException(
+            status_code=500, detail="An error occurred while processing the estimation"
+        )
 
     logger.info("Estimation result: %s", response)
 
