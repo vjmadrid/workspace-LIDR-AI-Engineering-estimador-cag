@@ -1,6 +1,6 @@
-from app.services.estimate_services import EstimateService
+from app.services.estimate_openai_services import EstimateOpenAIService
 
-estimateService = EstimateService()
+estimateOpenAIService = EstimateOpenAIService()
 
 if __name__ == "__main__":
     MESSAGE = (
@@ -9,16 +9,16 @@ if __name__ == "__main__":
         "Se requiere autenticación corporativa, integración con el calendario de Outlook y panel de administración web para métricas."
     )
 
-    print("\n*************************")
-    print("\n***** ESTIMATE DEMO *****")
-    print("\n*************************")
+    print("\n********************************")
+    print("\n***** ESTIMATE DEMO OPENAI *****")
+    print("\n********************************")
 
     print("\nTranscripción de ejemplo:\n", MESSAGE)
 
     # Estimate
     print("\nEnviando transcripción a LLM ...\n")
 
-    estimation = estimateService.estimate_from_transcript(
+    estimation = estimateOpenAIService.estimate_from_transcript(
         transcript=MESSAGE, model="gpt-4o-mini"
     )
 

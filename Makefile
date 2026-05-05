@@ -90,8 +90,11 @@ run: ## Run Application
 run-script: ## Run a script: make run script=main.py
 	PYTHONPATH=app $(UV) run $(script)
 
-run-demo: ## Run the demo script
-	PYTHONPATH=$(CURDIR) $(PYTHON) scripts/estimate_demo.py
+run-demo-openai: ## Run the OpenAI demo script
+	PYTHONPATH=$(CURDIR) $(PYTHON) scripts/estimate_demo_openai.py
+
+run-demo-anthropic: ## Run the Anthropic demo script
+	PYTHONPATH=$(CURDIR) $(PYTHON) scripts/estimate_demo_anthropic.py
 
 run-uvicorn: ## Run Application with Uvicorn
 	$(UVICORN) $(UVICORN_START_FILE) --reload
@@ -140,5 +143,7 @@ docker-down:
 docker-logs:
 	docker compose logs -f estimator
 
+kill-port-app: ## Kill any process using the service port
+	$(CURDIR)/kill-port-app.sh
 
 .DEFAULT_GOAL := help

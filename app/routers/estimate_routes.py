@@ -6,24 +6,24 @@ from app.constants.estimate_constants import ESTIMATE_ENDPOINT
 from app.exceptions.estimate_exceptions import EstimateServiceException
 from app.requests.estimate_requests import EstimateRequest
 from app.response.estimate_responses import EstimateResponse, generate_estimate_response
-from app.services.estimate_services import EstimateService
+from app.services.estimate_openai_services import EstimateOpenAIService
 
 # Logging Configuration
 logger = logging.getLogger(__name__)
 
 # Services Configuracion
-estimateService = EstimateService()
+estimateOpenAIService = EstimateOpenAIService()
 
 
 router = APIRouter(prefix="/api/v1", tags=["estimations"])
 
 
 @router.post(ESTIMATE_ENDPOINT, response_model=EstimateResponse)
-async def estimate_endpoint(request: EstimateRequest):
+async def estimate_openai_endpoint(request: EstimateRequest):
     logger.info("Estimate endpoint called")
 
     try:
-        response = estimateService.estimate_from_transcript(request.transcription)
+        response = estimateOpenAIService.estimate_from_transcript(request.transcription)
     except EstimateServiceException as e:
         logger.error("Error occurred while estimating: %s", str(e))
         raise HTTPException(

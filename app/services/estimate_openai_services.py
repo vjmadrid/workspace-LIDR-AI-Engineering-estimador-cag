@@ -13,7 +13,7 @@ from app.services.estimate_prompt_builder import EstimatePromptBuilder
 logger = logging.getLogger(__name__)
 
 
-class EstimateService:
+class EstimateOpenAIService:
     def __init__(
         self,
         client: OpenAI | None = None,
