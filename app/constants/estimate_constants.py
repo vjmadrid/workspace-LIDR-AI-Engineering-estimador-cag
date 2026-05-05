@@ -3,6 +3,7 @@
 ROOT_ENDPOINT = "/estimate"
 
 ESTIMATE_OPENAI_ENDPOINT = "/estimate/openai"
+ESTIMATE_OPENAI_STREAM_ENDPOINT = "/estimate/openai/stream"
 ESTIMATE_ANTHROPIC_ENDPOINT = "/estimate/anthropic"
 
 # OpenAI Configuration

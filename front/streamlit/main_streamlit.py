@@ -8,11 +8,10 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from app.context.examples import ESTIMATION_EXAMPLES  # noqa: E402
 from app.config import get_settings  # noqa: E402
 from app.response.estimate_responses import EstimateResponse  # noqa: E402
-from front.streamlit.client.estimate_client import (  # noqa: E402
-    EstimateBackendClient,
+from front.streamlit.client.estimate_openai_client import (  # noqa: E402
+    EstimateOpenAIBackendClient,
     EstimateBackendError,
 )
 
@@ -32,11 +31,11 @@ class ChatMessage(TypedDict):
 
 
 @st.cache_resource
-def get_estimate_client(
+def get_estimate_openai_client(
     base_url: str,
     timeout_seconds: float,
-) -> EstimateBackendClient:
-    return EstimateBackendClient(
+) -> EstimateOpenAIBackendClient:
+    return EstimateOpenAIBackendClient(
         base_url=base_url,
         timeout_seconds=timeout_seconds,
     )
@@ -89,7 +88,7 @@ def build_estimate_caption(response: EstimateResponse) -> str:
 
 
 def request_estimation(
-    client: EstimateBackendClient,
+    client: EstimateOpenAIBackendClient,
     transcription: str,
 ) -> tuple[str, str]:
     response = client.estimate_from_transcript(transcription)
@@ -160,7 +159,7 @@ settings = get_settings()
 # Client Configuration
 # =====================
 
-estimate_client = get_estimate_client(
+estimate_client = get_estimate_openai_client(
     settings.ESTIMATE_BACKEND_BASE_URL,
     settings.ESTIMATE_BACKEND_TIMEOUT_SECONDS,
 )

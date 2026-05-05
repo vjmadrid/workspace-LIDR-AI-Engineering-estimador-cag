@@ -27,6 +27,12 @@ MAIN_FILE := app/main.py
 UVICORN_START_FILE := app.main:app
 
 # =====================
+# Streamlit Configuration
+# =====================
+
+STREAMLIT_PORT ?= 8500
+
+# =====================
 # General Configuration
 # =====================
 
@@ -34,7 +40,6 @@ UVICORN_START_FILE := app.main:app
 UV = uv
 PYTHON = $(UV) run python
 UVICORN = uvicorn
-STREAMLIT_PORT ?= 8503
 
 # =====================
 # Help
@@ -112,6 +117,10 @@ run-uvicorn: ## Run Application with Uvicorn
 run-streamlit: ## Run Streamlit application
 	$(UV) run streamlit run front/streamlit/main_streamlit.py --server.port $(STREAMLIT_PORT)
 
+run-streamlit-2: ## Run Streamlit application
+	$(UV) run streamlit run front/streamlit/main_streamlit_2.py --server.port $(STREAMLIT_PORT)
+
+
 # =====================
 # Linter
 # =====================
@@ -157,7 +166,10 @@ docker-logs:
 # Support
 # =====================
 
-kill-port-app: ## Kill any process using the service port
-	$(CURDIR)/kill-port-app.sh
+kill-port-uvicorn: ## Kill any process using the service port
+	$(CURDIR)/kill-port-uvicorn.sh
+
+kill-port-streamlit: ## Kill any process using the Streamlit port
+	$(CURDIR)/kill-port-streamlit.sh
 
 .DEFAULT_GOAL := help
