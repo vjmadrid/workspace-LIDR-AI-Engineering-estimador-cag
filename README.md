@@ -55,6 +55,11 @@ Para ello se harña uso de uan arquitectura CAG (Cache Augmente Generation)
   * [Repositorio](https://github.com/anthropics/anthropic-sdk-python)
   * [Documentacion](https://github.com/anthropics/anthropic-sdk-python)
   * [Web](https://github.com/anthropics/anthropic-sdk-python)
+* **streamlit** : Framework de código abierto para crear aplicaciones web interactivas y visualizaciones de datos con Python.
+  * [Pypi](https://pypi.org/project/streamlit/)
+  * [Repositorio](https://github.com/streamlit/streamlit)
+  * [Documentacion](https://docs.streamlit.io/)
+  * [Web](https://streamlit.io/)
 
 ### Dependencias proyectos de arquitectura
 
@@ -140,6 +145,7 @@ uv add anthropic
 uv add pydantic-settings
 uv add pipdeptree
 uv add tiktoken
+uv add streamlit
 
 # Desarrollo
 uv add --dev ruff

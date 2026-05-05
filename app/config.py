@@ -1,18 +1,18 @@
 import logging
 import pathlib
-from enum import Enum
+from enum import StrEnum
 from functools import lru_cache
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-class AppEnvironment(str, Enum):
+class AppEnvironment(StrEnum):
     DEVELOPMENT = "development"
     TEST = "test"
     PRODUCTION = "production"
 
 
-class LLMProvider(str, Enum):
+class LLMProvider(StrEnum):
     OPENAI = "openai"
     ANTHROPIC = "anthropic"
 
@@ -40,6 +40,8 @@ class Settings(BaseSettings):
     APP_NAME: str = "estimador-cag-default"
     APP_ENV: AppEnvironment = AppEnvironment.DEVELOPMENT
     LOG_LEVEL: str = logging.INFO
+    ESTIMATE_BACKEND_BASE_URL: str = "http://127.0.0.1:8000"
+    ESTIMATE_BACKEND_TIMEOUT_SECONDS: float = 120.0
 
     # LLM Settings
     LLM_PROVIDER: LLMProvider = LLMProvider.OPENAI

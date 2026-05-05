@@ -24,6 +24,7 @@ UVICORN_START_FILE := app.main:app
 UV = uv
 PYTHON = $(UV) run python
 UVICORN = uvicorn
+STREAMLIT_PORT ?= 8503
 
 # =====================
 # Help
@@ -94,6 +95,9 @@ run-demo: ## Run the demo script
 
 run-uvicorn: ## Run Application with Uvicorn
 	$(UVICORN) $(UVICORN_START_FILE) --reload
+
+run-streamlit: ## Run Streamlit application
+	$(UV) run streamlit run front/streamlit/main_streamlit.py --server.port $(STREAMLIT_PORT)
 
 # =====================
 # Linter
