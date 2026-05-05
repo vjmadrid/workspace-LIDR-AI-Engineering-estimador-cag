@@ -11,14 +11,16 @@ if str(PROJECT_ROOT) not in sys.path:
 from app.config import get_settings  # noqa: E402
 from app.response.estimate_responses import EstimateResponse  # noqa: E402
 from front.streamlit.client.estimate_openai_client import (  # noqa: E402
-    EstimateOpenAIBackendClient,
     EstimateBackendError,
+    EstimateOpenAIBackendClient,
 )
 
 CHAT_MESSAGES_KEY = "estimate_chat_messages"
 
 PREDEFINED_PROMPT_TEXT = """
-El cliente solicita una aplicación móvil para gestionar reservas de salas de reuniones en una empresa. La app debe permitir a los empleados ver la disponibilidad, reservar, cancelar y recibir notificaciones. Se requiere autenticación corporativa, integración con el calendario de Outlook y panel de administración web para métricas.
+El cliente solicita una aplicación móvil para gestionar reservas de salas de reuniones en una empresa. La app debe permitir a los
+empleados ver la disponibilidad, reservar, cancelar y recibir notificaciones. Se requiere autenticación corporativa, integración
+con el calendario de Outlook y panel de administración web para métricas.
 """
 
 ChatRole = Literal["user", "assistant"]

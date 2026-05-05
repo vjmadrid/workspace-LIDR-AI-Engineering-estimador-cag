@@ -115,10 +115,13 @@ run-uvicorn: ## Run Application with Uvicorn
 	$(UVICORN) $(UVICORN_START_FILE) --host $(SERVICE_HOST) --port $(SERVICE_PORT) --reload
 
 run-streamlit: ## Run Streamlit application
-	$(UV) run streamlit run front/streamlit/main_streamlit.py --server.port $(STREAMLIT_PORT)
+	$(UV) run streamlit run front/streamlit/main_streamlit_openai.py --server.port $(STREAMLIT_PORT)
 
 run-streamlit-2: ## Run Streamlit application
-	$(UV) run streamlit run front/streamlit/main_streamlit_2.py --server.port $(STREAMLIT_PORT)
+	$(UV) run streamlit run front/streamlit/main_streamlit_openai_2.py --server.port $(STREAMLIT_PORT)
+
+run-streamlit-3: ## Run Streamlit application
+	$(UV) run streamlit run front/streamlit/main_streamlit_openai_3.py --server.port $(STREAMLIT_PORT)
 
 
 # =====================
@@ -167,9 +170,11 @@ docker-logs:
 # =====================
 
 kill-port-uvicorn: ## Kill any process using the service port
-	$(CURDIR)/kill-port-uvicorn.sh
+	$(CURDIR)/kill-port.sh $(SERVICE_PORT)
 
 kill-port-streamlit: ## Kill any process using the Streamlit port
-	$(CURDIR)/kill-port-streamlit.sh
+	$(CURDIR)/kill-port.sh $(STREAMLIT_PORT)
+
+
 
 .DEFAULT_GOAL := help

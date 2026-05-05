@@ -1,4 +1,5 @@
 import sys
+import time
 from pathlib import Path
 from typing import Literal, TypedDict
 
@@ -9,6 +10,8 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from app.config import get_settings  # noqa: E402
+from app.context.estimate_prompts import SYSTEM_PROMPT  # noqa: E402
+from app.context.examples import ESTIMATION_EXAMPLES, format_examples_for_prompt  # noqa: E402
 from app.response.estimate_responses import EstimateResponse  # noqa: E402
 from front.streamlit.client.estimate_openai_client import (  # noqa: E402
     EstimateBackendError,
@@ -17,6 +20,7 @@ from front.streamlit.client.estimate_openai_client import (  # noqa: E402
 )
 
 CHAT_MESSAGES_KEY = "estimate_chat_messages"
+LAST_CALL_METRICS_KEY = "estimate_last_call_metrics"
 
 PREDEFINED_PROMPT_TEXT = """
 El cliente solicita una aplicación móvil para gestionar reservas de salas de reuniones en una empresa. La app debe permitir a los
@@ -33,6 +37,13 @@ class ChatMessage(TypedDict):
     caption: str | None
 
 
+class LastCallMetrics(TypedDict):
+    model: str
+    input_tokens: int
+    output_tokens: int
+    response_time_seconds: float
+
+
 @st.cache_resource
 def get_estimate_openai_client(
     base_url: str,
@@ -47,6 +58,8 @@ def get_estimate_openai_client(
 def initialize_chat_state() -> None:
     if CHAT_MESSAGES_KEY not in st.session_state:
         st.session_state[CHAT_MESSAGES_KEY] = []
+    if LAST_CALL_METRICS_KEY not in st.session_state:
+        st.session_state[LAST_CALL_METRICS_KEY] = None
 
 
 def append_message(
@@ -102,29 +115,50 @@ def build_stream_estimate_caption(event: EstimateStreamEvent) -> str:
     return " · ".join(caption_parts)
 
 
+def build_last_call_metrics(
+    event: EstimateStreamEvent,
+    response_time_seconds: float,
+) -> LastCallMetrics:
+    return {
+        "model": event.get("llm_model", "desconocido"),
+        "input_tokens": event.get("num_tokens_input", 0),
+        "output_tokens": event.get("num_tokens_response", 0),
+        "response_time_seconds": response_time_seconds,
+    }
+
+
 def stream_estimation(
     client: EstimateOpenAIBackendClient,
     transcription: str,
-) -> tuple[str, str | None]:
+) -> tuple[str, str | None, LastCallMetrics | None]:
     caption: str | None = None
+    metadata_event: EstimateStreamEvent | None = None
 
     def tokens():
-        nonlocal caption
+        nonlocal caption, metadata_event
 
         for event in client.stream_estimate_from_transcript(transcription):
             if event.get("type") == "delta":
                 yield event.get("content", "")
             elif event.get("type") == "metadata":
+                metadata_event = event
                 caption = build_stream_estimate_caption(event)
 
+    start_time = time.perf_counter()
     estimation = st.write_stream(tokens)
+    response_time_seconds = time.perf_counter() - start_time
+
+    metrics = None
+    if metadata_event is not None:
+        metrics = build_last_call_metrics(metadata_event, response_time_seconds)
+
     if isinstance(estimation, str):
-        return estimation, caption
+        return estimation, caption, metrics
 
-    return "".join(str(part) for part in estimation), caption
+    return "".join(str(part) for part in estimation), caption, metrics
 
 
-def process_transcription(transcription: str) -> None:
+def process_transcription(transcription: str, metrics_placeholder) -> None:
     normalized_transcription = transcription.strip()
 
     if not normalized_transcription:
@@ -136,10 +170,12 @@ def process_transcription(transcription: str) -> None:
 
     with st.chat_message("assistant"):
         try:
-            estimation, caption = stream_estimation(
+            estimation, caption, metrics = stream_estimation(
                 estimate_client,
                 normalized_transcription,
             )
+            if metrics:
+                st.session_state[LAST_CALL_METRICS_KEY] = metrics
         except EstimateBackendError as exc:
             estimation = str(exc)
             caption = None
@@ -149,6 +185,7 @@ def process_transcription(transcription: str) -> None:
             st.caption(caption)
 
     append_message("assistant", estimation, caption)
+    render_last_call_metrics(metrics_placeholder)
 
 
 # Function to configure the Streamlit page layout and settings
@@ -166,18 +203,59 @@ def configure_page():
     return st.empty()
 
 
+def render_last_call_metrics(container) -> None:
+    metrics = st.session_state.get(LAST_CALL_METRICS_KEY)
+
+    with container.container():
+        st.subheader("Última llamada")
+        if not metrics:
+            st.caption("Aún no se ha generado ninguna estimación.")
+            return
+
+        st.metric("Modelo", metrics["model"])
+        st.metric("Tokens de entrada", metrics["input_tokens"])
+        st.metric("Tokens de salida", metrics["output_tokens"])
+        st.metric("Tiempo de respuesta", f"{metrics['response_time_seconds']:.2f} s")
+
+
 # Function to display and handle sidebar interactions
 def handle_sidebar():
+    selected_transcription = None
+
     with st.sidebar:
         st.subheader("Sesión")
         if st.button("Limpiar conversación", use_container_width=True):
             st.session_state[CHAT_MESSAGES_KEY] = []
+            st.session_state[LAST_CALL_METRICS_KEY] = None
             st.rerun()
 
         if st.button("Cargar prompt predefinido", use_container_width=True):
-            return PREDEFINED_PROMPT_TEXT
+            selected_transcription = PREDEFINED_PROMPT_TEXT
 
-    return None
+        st.divider()
+        st.subheader("System prompt activo")
+        st.text_area(
+            "System prompt",
+            value=SYSTEM_PROMPT,
+            height=160,
+            disabled=True,
+            label_visibility="collapsed",
+        )
+
+        st.subheader("Contexto estático inyectado")
+        st.text_area(
+            "Estimaciones de ejemplo",
+            value=format_examples_for_prompt(ESTIMATION_EXAMPLES),
+            height=320,
+            disabled=True,
+            label_visibility="collapsed",
+        )
+
+        st.divider()
+        metrics_placeholder = st.empty()
+        render_last_call_metrics(metrics_placeholder)
+
+    return selected_transcription, metrics_placeholder
 
 
 # =====================
@@ -203,16 +281,16 @@ debug_placeholder = configure_page()
 
 initialize_chat_state()
 
-sidebar_transcription = handle_sidebar()
+sidebar_transcription, metrics_placeholder = handle_sidebar()
 
 render_chat_history()
 
 transcription = st.chat_input("Escribe o pega la transcripción de la reunión")
 
 if sidebar_transcription:
-    process_transcription(sidebar_transcription)
+    process_transcription(sidebar_transcription, metrics_placeholder)
 elif transcription:
-    process_transcription(transcription)
+    process_transcription(transcription, metrics_placeholder)
 
 with debug_placeholder.container():
     with st.expander("Check State"):
