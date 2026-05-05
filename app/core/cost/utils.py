@@ -1,5 +1,5 @@
+from app.core.openai.constants import DEFAULT_OPENAI_MODEL, DEFAULT_ANTHROPIC_MODEL
 from app.core.cost.dtos import TokenCostResponseDTO
-from app.core.openai.constants import DEFAULT_OPENAI_MODEL
 
 
 class OpenAICostUtil:
@@ -21,6 +21,47 @@ class OpenAICostUtil:
 
         # Get pricing for the specified model
         pricing = OpenAICostUtil.PRICING[model]
+
+        # Calculate cost based on token counts and pricing
+        input_token_cost = (input_tokens / 1_000_000) * pricing["input"]
+        output_token_cost = (output_tokens / 1_000_000) * pricing["output"]
+        total_token_cost = input_token_cost + output_token_cost
+
+        # Build response DTO
+        response_dto = TokenCostResponseDTO(
+            llm_model=model,
+            input_token_cost=input_token_cost,
+            output_token_cost=output_token_cost,
+            total_token_cost=total_token_cost,
+        )
+
+        return response_dto
+
+
+class AnthropicCostUtil:
+    # Anthropic (USD per 1M tokens)
+    PRICING = {
+        "claude-3-5-haiku-latest": {"input": 0.80, "output": 4.00},
+        "claude-3-5-haiku-20241022": {"input": 0.80, "output": 4.00},
+        "claude-sonnet-4-0": {"input": 3.00, "output": 15.00},
+        "claude-sonnet-4-20250514": {"input": 3.00, "output": 15.00},
+        "claude-haiku-4-5-20251001": {"input": 1.00, "output": 5.00},
+        "claude-sonnet-4-6-20250514": {"input": 3.00, "output": 15.00},
+        "claude-3-7-sonnet-latest": {"input": 3.00, "output": 15.00},
+        "claude-3-7-sonnet-20250219": {"input": 3.00, "output": 15.00},
+        "claude-opus-4-1": {"input": 15.00, "output": 75.00},
+        "claude-opus-4-1-20250805": {"input": 15.00, "output": 75.00},
+        "claude-opus-4-0": {"input": 15.00, "output": 75.00},
+        "claude-opus-4-20250514": {"input": 15.00, "output": 75.00},
+    }
+
+    @staticmethod
+    def calculate_cost(model=DEFAULT_ANTHROPIC_MODEL, input_tokens=0, output_tokens=0):
+        if model not in AnthropicCostUtil.PRICING:
+            raise ValueError(f"Model '{model}' not found in pricing table")
+
+        # Get pricing for the specified model
+        pricing = AnthropicCostUtil.PRICING[model]
 
         # Calculate cost based on token counts and pricing
         input_token_cost = (input_tokens / 1_000_000) * pricing["input"]

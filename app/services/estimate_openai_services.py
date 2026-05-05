@@ -2,7 +2,7 @@ import logging
 
 from openai import OpenAI
 
-from app.config import get_settings
+from app.config import LLMProvider, get_settings
 from app.constants.estimate_constants import OPENAI_MODEL_DEFAULT
 from app.core.cost.utils import OpenAICostUtil
 from app.core.token.utils import OpenAITokenUtil
@@ -11,7 +11,6 @@ from app.exceptions.estimate_exceptions import EstimateServiceException
 from app.services.estimate_prompt_builder import EstimatePromptBuilder
 
 logger = logging.getLogger(__name__)
-
 
 class EstimateOpenAIService:
     def __init__(
@@ -35,9 +34,12 @@ class EstimateOpenAIService:
         transcript: str,
         model: str = OPENAI_MODEL_DEFAULT,
     ) -> EstimateResponseDTO:
+        logger.info("Estimating transcript with OpenAI model=%s", model)
+
+        # Prepare prompts
         messages = self._prompt_builder.build_messages(transcript)
 
-        logger.info("Estimating transcript with model=%s", model)
+        # Count tokens before making the API call to have an estimate of the input tokens
         input_tokens = OpenAITokenUtil.count_tokens(messages, model)
         logger.debug("Estimated prompt tokens: %s", input_tokens)
 
@@ -48,7 +50,7 @@ class EstimateOpenAIService:
                 temperature=0.2,
             )
         except Exception as exc:
-            logger.exception("Error while generating estimation")
+            logger.exception("Error while generating estimation with OpenAI")
             raise EstimateServiceException(
                 "An error occurred while generating the estimation"
             ) from exc
@@ -62,8 +64,8 @@ class EstimateOpenAIService:
         if not response_content:
             raise EstimateServiceException("The LLM response content is empty")
 
-        logger.debug("Prompt tokens used: %s", response.usage.prompt_tokens)
-        logger.debug("Completion tokens used: %s", response.usage.completion_tokens)
+        logger.debug("Input tokens used: %s", response.usage.prompt_tokens)
+        logger.debug("Output tokens used: %s", response.usage.completion_tokens)
         logger.debug("Total tokens used: %s", response.usage.total_tokens)
 
         token_costs = OpenAICostUtil.calculate_cost(
@@ -73,7 +75,7 @@ class EstimateOpenAIService:
         )
 
         return EstimateResponseDTO(
-            llm_provider=self._settings.LLM_PROVIDER,
+            llm_provider=LLMProvider.OPENAI,
             llm_model=model,
             response=response_content.strip(),
             num_tokens_input=response.usage.prompt_tokens,
