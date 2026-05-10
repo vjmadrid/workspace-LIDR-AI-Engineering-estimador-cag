@@ -93,6 +93,11 @@ N/A
 
 **Testing / QA**
 
+* **pytest** : Framework de testing para Python
+  * [Pypi](https://pypi.org/project/pytest/)
+  * [Repositorio](https://github.com/pytest-dev/pytest)
+  * [Documentacion](https://docs.pytest.org/en/stable/)
+
 ## Pre-Requisitos
 
 * Python 3 (>=3.11) instalado
@@ -152,7 +157,7 @@ uv add streamlit
 
 # Desarrollo
 uv add --dev ruff
-uv add --deb pytest
+uv add --dev pytest
 ```
 
 ## Uso

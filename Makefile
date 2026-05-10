@@ -42,6 +42,26 @@ PYTHON = $(UV) run python
 UVICORN = uvicorn
 
 # =====================
+# Pytest Configuration
+# =====================
+
+# Parameters for pytest execution
+# -s: Disable output capture to see print statements and logs in real-time
+
+PYTEST_PARAMETER_CONSOLE := -s
+
+# Parameters for pytest execution
+# --setup-show: Show setup and teardown of fixtures
+PYTEST_PARAMETER_SETUP := --setup-show
+
+PYTEST_PARAMETER_DEBUG := $(PYTEST_PARAMETER_CONSOLE)
+
+# Parameters for pytest execution
+# -ra: Show extra test summary info for skipped, failed, etc.
+# -vv: Increase verbosity for more detailed test output
+PYTEST_PARAMETER := -ra -vv $(PYTEST_PARAMETER_DEBUG)
+
+# =====================
 # Help
 # =====================
 
@@ -131,6 +151,7 @@ run-streamlit-3: ## Run Streamlit application
 lint: ## Run Ruff linter
 	$(UV) run ruff check .
 
+
 # =====================
 # Formatter
 # =====================
@@ -142,12 +163,20 @@ fix: ## Run Ruff formatter with fixes
 	$(UV) run ruff check . --fix
 	$(UV) run ruff format .
 
+
 # =====================
 # Testing
 # =====================
 
-test: ## Run spec-driven tests
+test: ## Run all tests of all types
+	$(UV) run pytest $(PYTEST_PARAMETER) -v
+
+test-unit: ## Run unit tests with pytest
+	$(UV) run pytest $(PYTEST_PARAMETER) tests/units
+
+test-specs: ## Run spec-driven tests
 	$(CURDIR)/.venv/bin/python -m unittest discover -s tests
+
 
 # =====================
 # Docker
