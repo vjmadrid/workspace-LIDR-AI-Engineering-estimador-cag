@@ -1,4 +1,4 @@
-from app.context.estimate_prompts import SYSTEM_PROMPT
+from app.context.estimate_prompts import DEFAULT_SYSTEM_PROMPT_1
 from app.context.examples import ESTIMATION_EXAMPLES
 
 
@@ -13,7 +13,7 @@ class EstimatePromptBuilder:
 
     def __init__(
         self,
-        system_prompt: str = SYSTEM_PROMPT,
+        system_prompt: str = DEFAULT_SYSTEM_PROMPT_1,
         examples: list[dict] = ESTIMATION_EXAMPLES,
     ):
         self.system_prompt = system_prompt

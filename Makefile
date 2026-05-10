@@ -171,8 +171,11 @@ fix: ## Run Ruff formatter with fixes
 test: ## Run all tests of all types
 	$(UV) run pytest $(PYTEST_PARAMETER) -v
 
-test-unit: ## Run unit tests with pytest
+test-units: ## Run unit tests with pytest
 	$(UV) run pytest $(PYTEST_PARAMETER) tests/units
+
+test-integrations: ## Run integration tests with pytest
+	$(UV) run pytest $(PYTEST_PARAMETER) tests/integrations
 
 test-specs: ## Run spec-driven tests
 	$(CURDIR)/.venv/bin/python -m unittest discover -s tests
