@@ -8,7 +8,7 @@ from app.config import LLMProvider, get_settings
 from app.constants.estimate_constants import OPENAI_MODEL_DEFAULT
 from app.core.cost.utils import OpenAICostUtil
 from app.core.token.utils import OpenAITokenUtil
-from app.dtos.estimate_dtos import EstimateResponseDTO
+from app.dtos.estimate_dtos import EstimateResponseDTO, generate_openai_estimate_response_dto
 from app.exceptions.estimate_exceptions import EstimateServiceException
 from app.prompts.builders.estimate_openai_prompt_builder import EstimateOpenAIPromptBuilder
 
@@ -63,6 +63,8 @@ class EstimateOpenAIService:
         if not response_content:
             raise EstimateServiceException("The LLM response content is empty")
 
+        estimate_response_dto = generate_openai_estimate_response_dto(LLMProvider.OPENAI, model, response)
+
         logger.debug("Input tokens used: %s", response.usage.prompt_tokens)
         logger.debug("Output tokens used: %s", response.usage.completion_tokens)
         logger.debug("Total tokens used: %s", response.usage.total_tokens)
@@ -73,17 +75,7 @@ class EstimateOpenAIService:
             output_tokens=response.usage.completion_tokens,
         )
 
-        return EstimateResponseDTO(
-            llm_provider=LLMProvider.OPENAI,
-            llm_model=model,
-            response=response_content.strip(),
-            num_tokens_input=response.usage.prompt_tokens,
-            num_tokens_response=response.usage.completion_tokens,
-            num_tokens_total=response.usage.total_tokens,
-            input_token_cost=token_costs.input_token_cost,
-            output_token_cost=token_costs.output_token_cost,
-            total_token_cost=token_costs.total_token_cost,
-        )
+        return estimate_response_dto
 
     def stream_estimate_from_transcript(
         self,

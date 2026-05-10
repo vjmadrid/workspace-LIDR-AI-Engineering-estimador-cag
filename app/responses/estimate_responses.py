@@ -6,6 +6,7 @@ from app.dtos.estimate_dtos import EstimateResponseDTO
 # =====================
 # Responses (BaseModel)
 # =====================
+
 class EstimateTokenMetadataResponse(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -32,8 +33,8 @@ class EstimateMetadataResponse(BaseModel):
 class EstimateResponse(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    provider: str
-    llm_model: str
+    provider: str = Field(..., description="LLM provider used")
+    llm_model: str = Field(..., description="LLM model used")
     estimation: str = Field(..., description="Estimación generada por el modelo")
     metadata: EstimateMetadataResponse | None = None
 
@@ -41,7 +42,6 @@ class EstimateResponse(BaseModel):
 # =====================
 # Generator functions
 # =====================
-
 
 def generate_estimate_response(estimate: EstimateResponseDTO):
 

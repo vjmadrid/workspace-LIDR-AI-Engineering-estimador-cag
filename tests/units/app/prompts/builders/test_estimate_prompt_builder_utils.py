@@ -1,7 +1,7 @@
 from unittest.mock import Mock
 
 from app.prompts.builders import utils as prompt_builder_utils
-from app.prompts.builders.utils import PromptBuilderUtil
+from app.prompts.builders.utils import EstimatePromptBuilderUtil
 
 
 def test_build_system_prompt_returns_expected_base_instructions(monkeypatch):
@@ -11,7 +11,7 @@ def test_build_system_prompt_returns_expected_base_instructions(monkeypatch):
         Mock(return_value="FORMATTED EXAMPLES"),
     )
 
-    prompt = PromptBuilderUtil.build_system_prompt()
+    prompt = EstimatePromptBuilderUtil.build_system_prompt()
 
     assert "You are a senior software consultant with 15+ years of experience" in prompt
     assert "Your output MUST follow this exact format:" in prompt
@@ -32,7 +32,7 @@ def test_build_system_prompt_appends_formatted_examples(monkeypatch):
         Mock(return_value="FORMATTED EXAMPLES"),
     )
 
-    prompt = PromptBuilderUtil.build_system_prompt()
+    prompt = EstimatePromptBuilderUtil.build_system_prompt()
 
     assert prompt.endswith("FORMATTED EXAMPLES")
 
@@ -45,7 +45,7 @@ def test_build_system_prompt_formats_estimation_examples(monkeypatch):
         format_examples_for_prompt,
     )
 
-    PromptBuilderUtil.build_system_prompt()
+    EstimatePromptBuilderUtil.build_system_prompt()
 
     format_examples_for_prompt.assert_called_once_with(
         prompt_builder_utils.ESTIMATION_EXAMPLES
@@ -59,7 +59,7 @@ def test_build_system_prompt_returns_non_empty_string(monkeypatch):
         Mock(return_value="FORMATTED EXAMPLES"),
     )
 
-    prompt = PromptBuilderUtil.build_system_prompt()
+    prompt = EstimatePromptBuilderUtil.build_system_prompt()
 
     assert isinstance(prompt, str)
     assert prompt

@@ -4,9 +4,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_settings
+from app.routers.manager_routes import router as manager_router
+from app.routers.estimate_routes import router as estimation_router
 from app.routers.estimate_openai_routes import router as estimation_openai_router
 from app.routers.estimate_anthropic_routes import router as estimation_anthropic_router
-from app.routers.manager_routes import router as manager_router
+
 
 logger = logging.getLogger(__name__)
 
@@ -28,6 +30,9 @@ def create_app() -> FastAPI:
     )
 
     logger.info("APP_ENV: %s", settings.APP_ENV.value)
+    logger.info("LLM_PROVIDER: %s", settings.LLM_PROVIDER.value)
+    logger.info("OpenAI Model: %s", settings.OPENAI_MODEL)
+    logger.info("Anthropic Model: %s", settings.ANTHROPIC_MODEL)
 
     # Add CORS Support
     app.add_middleware(
@@ -40,6 +45,7 @@ def create_app() -> FastAPI:
 
     # Add API routers
     app.include_router(manager_router)
+    app.include_router(estimation_router)
     app.include_router(estimation_openai_router)
     app.include_router(estimation_anthropic_router)
 

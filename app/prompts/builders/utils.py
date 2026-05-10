@@ -2,7 +2,7 @@
 from app.context.examples import ESTIMATION_EXAMPLES
 from app.context.utils import ContextExamplesUtil
 
-class PromptBuilderUtil:
+class EstimatePromptBuilderUtil:
     @staticmethod
     def build_system_prompt() -> str:
         """Construct the system prompt with role definition and reference examples."""
