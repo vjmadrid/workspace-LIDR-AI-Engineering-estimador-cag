@@ -177,6 +177,9 @@ test-units: ## Run unit tests with pytest
 test-integrations: ## Run integration tests with pytest
 	$(UV) run pytest $(PYTEST_PARAMETER) tests/integrations
 
+test-lab: ## Run lab tests with pytest
+	uv run pytest tests/units/app/services/openai/test_estimate_openai_services.py -q
+
 test-specs: ## Run spec-driven tests
 	$(CURDIR)/.venv/bin/python -m unittest discover -s tests
 

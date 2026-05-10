@@ -1,4 +1,4 @@
-from app.prompts.builders.estimate_prompt_builder import EstimatePromptBuilder
+from app.prompts.builders.estimate_openai_prompt_builder import EstimateOpenAIPromptBuilder
 
 
 def test_estimate_prompt_builder_is_created_with_custom_values():
@@ -9,7 +9,7 @@ def test_estimate_prompt_builder_is_created_with_custom_values():
         }
     ]
 
-    builder = EstimatePromptBuilder(
+    builder = EstimateOpenAIPromptBuilder(
         system_prompt="Eres un estimador tecnico.",
         examples=examples,
     )
@@ -19,7 +19,7 @@ def test_estimate_prompt_builder_is_created_with_custom_values():
 
 
 def test_build_messages_starts_with_system_prompt():
-    builder = EstimatePromptBuilder(
+    builder = EstimateOpenAIPromptBuilder(
         system_prompt="System prompt de prueba.",
         examples=[],
     )
@@ -33,7 +33,7 @@ def test_build_messages_starts_with_system_prompt():
 
 
 def test_build_messages_adds_final_transcript_message():
-    builder = EstimatePromptBuilder(
+    builder = EstimateOpenAIPromptBuilder(
         system_prompt="System prompt de prueba.",
         examples=[],
     )
@@ -57,7 +57,7 @@ def test_build_messages_includes_examples_between_system_and_transcript():
             "estimation": "Frontend: 13 horas",
         },
     ]
-    builder = EstimatePromptBuilder(
+    builder = EstimateOpenAIPromptBuilder(
         system_prompt="System prompt de prueba.",
         examples=examples,
     )
@@ -71,18 +71,18 @@ def test_build_messages_includes_examples_between_system_and_transcript():
         },
         {
             "role": "user",
-                "content": (
-                    "Ejemplo de entrada\n"
-                    "Resumen de reunión: Crear autenticacion.\n\n"
+            "content": (
+                "Ejemplo de entrada\n"
+                "Resumen de reunión: Crear autenticacion.\n\n"
                 "Ejemplo de salida\n"
                 "Backend: 8 horas"
             ),
         },
         {
             "role": "user",
-                "content": (
-                    "Ejemplo de entrada\n"
-                    "Resumen de reunión: Crear dashboard.\n\n"
+            "content": (
+                "Ejemplo de entrada\n"
+                "Resumen de reunión: Crear dashboard.\n\n"
                 "Ejemplo de salida\n"
                 "Frontend: 13 horas"
             ),
@@ -95,7 +95,7 @@ def test_build_messages_includes_examples_between_system_and_transcript():
 
 
 def test_build_messages_without_examples_returns_system_and_transcript_messages():
-    builder = EstimatePromptBuilder(
+    builder = EstimateOpenAIPromptBuilder(
         system_prompt="System prompt de prueba.",
         examples=[],
     )
@@ -111,7 +111,7 @@ def test_build_messages_without_examples_returns_system_and_transcript_messages(
 
 
 def test_build_messages_preserves_transcript_content():
-    builder = EstimatePromptBuilder(
+    builder = EstimateOpenAIPromptBuilder(
         system_prompt="System prompt de prueba.",
         examples=[],
     )

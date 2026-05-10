@@ -7,7 +7,7 @@ from app.constants.estimate_constants import ANTHROPIC_MODEL_DEFAULT, ANTHROPIC_
 from app.core.cost.utils import AnthropicCostUtil
 from app.dtos.estimate_dtos import EstimateResponseDTO
 from app.exceptions.estimate_exceptions import EstimateServiceException
-from app.prompts.builders.estimate_prompt_builder import EstimatePromptBuilder
+from app.prompts.builders.estimate_openai_prompt_builder import EstimateOpenAIPromptBuilder
 
 logger = logging.getLogger(__name__)
 
@@ -15,12 +15,12 @@ class EstimateAnthropicService:
     def __init__(
         self,
         client: Anthropic | None = None,
-        prompt_builder: EstimatePromptBuilder | None = None,
+        prompt_builder: EstimateOpenAIPromptBuilder | None = None,
         settings=None,
     ):
         self._client = client
         self._settings = settings or get_settings()
-        self._prompt_builder = prompt_builder or EstimatePromptBuilder()
+        self._prompt_builder = prompt_builder or EstimateOpenAIPromptBuilder()
 
     @property
     def client(self) -> Anthropic:

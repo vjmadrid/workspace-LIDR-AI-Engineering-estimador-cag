@@ -1,4 +1,4 @@
-from app.services.estimate_anthropic_services import EstimateAnthropicService
+from app.services.anthropic.estimate_anthropic_services import EstimateAnthropicService
 
 estimateAnthropicService = EstimateAnthropicService()
 

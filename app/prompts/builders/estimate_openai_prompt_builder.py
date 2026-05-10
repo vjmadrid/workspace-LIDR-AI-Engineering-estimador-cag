@@ -2,7 +2,7 @@ from app.context.estimate_prompts import DEFAULT_SYSTEM_PROMPT_1
 from app.context.examples import ESTIMATION_EXAMPLES
 
 
-class EstimatePromptBuilder:
+class EstimateOpenAIPromptBuilder:
     """
     Builds the message payload used by the estimation workflow.
 

@@ -3,7 +3,7 @@ import unittest
 from pathlib import Path
 
 from app.requests.estimate_requests import EstimateRequest
-from app.response.estimate_responses import EstimateResponse
+from app.responses.estimate_responses import EstimateResponse
 
 ROOT_DIR = Path(__file__).resolve().parents[3]
 SPECS_DIR = ROOT_DIR / "specs"

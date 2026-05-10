@@ -1,4 +1,4 @@
-from app.services.estimate_openai_services import EstimateOpenAIService
+from app.services.openai.estimate_openai_services import EstimateOpenAIService
 
 estimateOpenAIService = EstimateOpenAIService()
 
