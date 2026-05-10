@@ -177,6 +177,12 @@ test-unit: ## Run unit tests with pytest
 test-specs: ## Run spec-driven tests
 	$(CURDIR)/.venv/bin/python -m unittest discover -s tests
 
+test-coverage: ## Run tests with coverage
+	$(UV) run coverage --version
+	$(UV) run coverage erase
+	$(UV) run coverage run --include=app/* -m pytest -ra
+	$(UV) run coverage report -m
+	$(UV) run coverage html -d ./reports/coverage_html
 
 # =====================
 # Docker

@@ -97,6 +97,14 @@ N/A
   * [Pypi](https://pypi.org/project/pytest/)
   * [Repositorio](https://github.com/pytest-dev/pytest)
   * [Documentacion](https://docs.pytest.org/en/stable/)
+* **pytest-cov** : Extensión de pytest que proporciona los datos de cobertura sobre los tests
+  * [Pypi](https://pypi.org/project/pytest-cov/)
+  * [Repositorio](https://github.com/pytest-dev/pytest-cov)
+  * [Documentacion](https://pytest-cov.readthedocs.io/en/latest/)
+* **pytest-randomly** : Extensión de pytest que permite ejecutar los tests en un orden aleatorio
+  * [Pypi](https://pypi.org/project/pytest-randomly/)
+  * [Repositorio](https://github.com/pytest-dev/pytest-randomly)
+  * [Documentacion](https://github.com/pytest-dev/pytest-randomly)
 
 ## Pre-Requisitos
 
@@ -158,6 +166,8 @@ uv add streamlit
 # Desarrollo
 uv add --dev ruff
 uv add --dev pytest
+uv add --dev pytest-cov
+uv add --dev pytest-randomly
 ```
 
 ## Uso
