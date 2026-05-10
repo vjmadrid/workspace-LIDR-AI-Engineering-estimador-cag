@@ -1,6 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
+from app.requests.estimate_requests import EstimateRequest
 from tests.units.app.requests.estimate_request_factory import EstimateRequestFactory
 
 
