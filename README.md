@@ -5,7 +5,7 @@
   - [Stack Tecnológico](#stack-tecnológico)
     - [General](#general)
     - [Dependencias proyectos de arquitectura](#dependencias-proyectos-de-arquitectura)
-    - [Dependencias de terceros](#dependencias-de-terceros)
+    - [Dependencia de terceros](#dependencia-de-terceros)
   - [Pre-Requisitos](#pre-requisitos)
   - [Instalación](#instalación)
     - [Instalación de entorno virtual](#instalación-de-entorno-virtual)
@@ -25,6 +25,8 @@ Para ello se harña uso de uan arquitectura CAG (Cache Augmente Generation)
 
 ## Stack Tecnológico
 
+### General
+
 * Python 3 (>=3.11) instalado
 * uv instalado
 * Soporte a Makefile
@@ -33,7 +35,13 @@ Para ello se harña uso de uan arquitectura CAG (Cache Augmente Generation)
 * API key de OpenAI y/o Anthropic como variables de entorno
 * Docker y Docker Compose
 
-### General
+### Dependencias proyectos de arquitectura
+
+N/A
+
+### Dependencia de terceros
+
+**Desarrollo**
 
 * **fastapi** : Framework web moderno y rápido para construir APIs con Python 3.6+ basado en estándares de Python type hints.
   * [Pypi](https://pypi.org/project/fastapi/)
@@ -60,13 +68,6 @@ Para ello se harña uso de uan arquitectura CAG (Cache Augmente Generation)
   * [Repositorio](https://github.com/streamlit/streamlit)
   * [Documentacion](https://docs.streamlit.io/)
   * [Web](https://streamlit.io/)
-
-### Dependencias proyectos de arquitectura
-
-N/A
-
-### Dependencias de terceros
-
 * **python-dotenv** : Utilidad que facilita trabajar con ficheros de variables de entorno (.env)
   * [Pypi](https://pypi.org/project/python-dotenv/)
   * [Repositorio](https://github.com/theskumar/python-dotenv)
@@ -89,6 +90,8 @@ N/A
   * [Pypi](https://pypi.org/project/ruff/)
   * [Repositorio](https://github.com/astral-sh/ruff)
   * [Documentacion](https://docs.astral.sh/ruff/)
+
+**Testing / QA**
 
 ## Pre-Requisitos
 
@@ -149,6 +152,7 @@ uv add streamlit
 
 # Desarrollo
 uv add --dev ruff
+uv add --deb pytest
 ```
 
 ## Uso
