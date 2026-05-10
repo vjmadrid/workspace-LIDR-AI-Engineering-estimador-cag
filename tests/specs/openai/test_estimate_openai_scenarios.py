@@ -10,17 +10,16 @@ from app.requests.estimate_requests import EstimateRequest
 from app.response.estimate_responses import generate_estimate_response
 from app.services.estimate_prompt_builder import EstimatePromptBuilder
 
-ROOT_DIR = Path(__file__).resolve().parents[2]
+ROOT_DIR = Path(__file__).resolve().parents[3]
 SPECS_DIR = ROOT_DIR / "specs"
-
 
 def load_json(relative_path: str) -> dict:
     return json.loads((SPECS_DIR / relative_path).read_text(encoding="utf-8"))
 
 
-class EstimateScenarioTests(unittest.TestCase):
+class EstimateOpenAIScenarioTests(unittest.TestCase):
     def test_success_scenario_is_stable(self) -> None:
-        scenario = load_json("scenarios/estimate_success.json")
+        scenario = load_json("scenarios/openai/estimate_openai_success.json")
         expected = scenario["expected_response"]
 
         dto = EstimateResponseDTO(
@@ -60,7 +59,7 @@ class EstimateScenarioTests(unittest.TestCase):
     def test_endpoint_rejects_blank_transcription(self) -> None:
         client = TestClient(create_app())
 
-        response = client.post("/api/v1/estimate", json={"transcription": "   "})
+        response = client.post("/api/v1/estimate/openai", json={"transcription": "   "})
 
         self.assertEqual(422, response.status_code)
         self.assertTrue(response.json()["detail"])
