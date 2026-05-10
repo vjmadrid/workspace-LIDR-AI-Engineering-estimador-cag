@@ -8,7 +8,7 @@ from app.app_factory import create_app
 from app.dtos.estimate_dtos import EstimateResponseDTO
 from app.requests.estimate_requests import EstimateRequest
 from app.response.estimate_responses import generate_estimate_response
-from app.services.estimate_prompt_builder import EstimatePromptBuilder
+from app.prompts.builders.estimate_prompt_builder import EstimatePromptBuilder
 
 ROOT_DIR = Path(__file__).resolve().parents[3]
 SPECS_DIR = ROOT_DIR / "specs"

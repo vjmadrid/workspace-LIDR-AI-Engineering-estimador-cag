@@ -7,7 +7,7 @@ from app.constants.estimate_constants import ANTHROPIC_MODEL_DEFAULT, ANTHROPIC_
 from app.core.cost.utils import AnthropicCostUtil
 from app.dtos.estimate_dtos import EstimateResponseDTO
 from app.exceptions.estimate_exceptions import EstimateServiceException
-from app.services.estimate_prompt_builder import EstimatePromptBuilder
+from app.prompts.builders.estimate_prompt_builder import EstimatePromptBuilder
 
 logger = logging.getLogger(__name__)
 
