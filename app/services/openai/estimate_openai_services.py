@@ -69,12 +69,6 @@ class EstimateOpenAIService:
         logger.debug("Output tokens used: %s", response.usage.completion_tokens)
         logger.debug("Total tokens used: %s", response.usage.total_tokens)
 
-        token_costs = OpenAICostUtil.calculate_cost(
-            model=model,
-            input_tokens=response.usage.prompt_tokens,
-            output_tokens=response.usage.completion_tokens,
-        )
-
         return estimate_response_dto
 
     def stream_estimate_from_transcript(

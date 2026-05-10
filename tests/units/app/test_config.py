@@ -33,6 +33,13 @@ def build_settings_payload(**overrides) -> dict:
         "LLM_PROVIDER": "openai",
         "OPENAI_MODEL": "gpt-4o-mini",
         "ANTHROPIC_MODEL": "claude-haiku",
+        "LLMLITE_MODEL": "gpt-4o-mini",
+        "PRIMARY_MODEL": "gpt-4o-mini",
+        "FALLBACK_MODEL": "claude-haiku-4-5-20251001",
+        "LLM_TIMEOUT": "30",
+        "LLM_RETRIES": "2",
+        "REDIS_URL": "redis://localhost:6379",
+        "CACHE_TTL": "86400",
         "OPENAI_API_KEY": "test-openai-api-key",
         "ANTHROPIC_API_KEY": "",
         "ESTIMATE_BACKEND_BASE_URL": "http://localhost:8000",
@@ -54,6 +61,13 @@ def test_settings_loads_valid_minimum_configuration_with_expected_types():
     assert settings.APP_NAME == "Estimador CAG"
     assert settings.APP_ENV == AppEnvironment.DEVELOPMENT
     assert settings.LLM_PROVIDER == LLMProvider.OPENAI
+    assert settings.LLMLITE_MODEL == "gpt-4o-mini"
+    assert settings.PRIMARY_MODEL == "gpt-4o-mini"
+    assert settings.FALLBACK_MODEL == "claude-haiku-4-5-20251001"
+    assert settings.LLM_TIMEOUT == 30
+    assert settings.LLM_RETRIES == 2
+    assert settings.REDIS_URL == "redis://localhost:6379"
+    assert settings.CACHE_TTL == 86400
     assert settings.ESTIMATE_BACKEND_TIMEOUT_SECONDS == 10.5
 
 
@@ -83,12 +97,25 @@ def test_settings_accepts_api_key_for_selected_provider():
     assert anthropic_settings.ANTHROPIC_API_KEY == "anthropic-key"
 
 
+def test_settings_accepts_llmlite_provider_without_provider_specific_api_key():
+    settings = build_settings(
+        LLM_PROVIDER="llmlite",
+        OPENAI_API_KEY="",
+        ANTHROPIC_API_KEY="",
+        LLMLITE_MODEL="anthropic/claude-haiku-4-5-20251001",
+    )
+
+    assert settings.LLM_PROVIDER == LLMProvider.LLMLITE
+    assert settings.LLMLITE_MODEL == "anthropic/claude-haiku-4-5-20251001"
+
+
 @pytest.mark.parametrize(
     ("app_env", "expected"),
     [
         ("production", True),
         ("development", False),
         ("test", False),
+        ("staging", False),
     ],
 )
 def test_settings_is_production_depends_on_app_environment(app_env, expected):
@@ -100,12 +127,14 @@ def test_settings_is_production_depends_on_app_environment(app_env, expected):
 def test_app_environment_enum_values_are_stable():
     assert AppEnvironment.DEVELOPMENT.value == "development"
     assert AppEnvironment.TEST.value == "test"
+    assert AppEnvironment.STAGING.value == "staging"
     assert AppEnvironment.PRODUCTION.value == "production"
 
 
 def test_llm_provider_enum_values_are_stable():
     assert LLMProvider.OPENAI.value == "openai"
     assert LLMProvider.ANTHROPIC.value == "anthropic"
+    assert LLMProvider.LLMLITE.value == "llmlite"
 
 
 def test_log_level_map_values_are_stable():

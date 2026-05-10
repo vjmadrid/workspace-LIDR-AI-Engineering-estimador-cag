@@ -10,12 +10,14 @@ from pydantic import model_validator
 class AppEnvironment(StrEnum):
     DEVELOPMENT = "development"
     TEST = "test"
+    STAGING = "staging"
     PRODUCTION = "production"
 
 
 class LLMProvider(StrEnum):
     OPENAI = "openai"
     ANTHROPIC = "anthropic"
+    LLMLITE = "llmlite"
 
 
 LOG_LEVEL_MAP = {
@@ -27,6 +29,8 @@ LOG_LEVEL_MAP = {
 
 
 class Settings(BaseSettings):
+    """Application settings loaded from environment variables and .env file."""
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
@@ -44,11 +48,28 @@ class Settings(BaseSettings):
 
     # LLM Settings
     LLM_PROVIDER: LLMProvider = LLMProvider.OPENAI
-    OPENAI_MODEL: str
-    ANTHROPIC_MODEL: str
 
+    # OpenAI Settings
+    OPENAI_MODEL: str
     OPENAI_API_KEY: str = ""
+    
+    # Anthropic Settings
+    ANTHROPIC_MODEL: str
     ANTHROPIC_API_KEY: str = ""
+    
+    # LiteLLM Settings
+    LLMLITE_MODEL: str = "gpt-4o-mini"
+
+    # LLM Advanced Settings
+    PRIMARY_MODEL: str = "gpt-4o-mini"
+    FALLBACK_MODEL: str = "claude-haiku-4-5-20251001"
+
+    LLM_TIMEOUT: int = 30
+    LLM_RETRIES: int = 2
+
+    # Caching Settings (Redis or similar)
+    REDIS_URL: str = "redis://localhost:6379"
+    CACHE_TTL: int = 86400
 
     # Streamlit Settings
     ESTIMATE_BACKEND_BASE_URL: str

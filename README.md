@@ -90,6 +90,12 @@ N/A
   * [Pypi](https://pypi.org/project/ruff/)
   * [Repositorio](https://github.com/astral-sh/ruff)
   * [Documentacion](https://docs.astral.sh/ruff/)
+* **litellm** : Utilidad para interactuar con modelos de lenguaje de forma sencilla (Abstracción de LLMs)
+  * [Pypi](https://pypi.org/project/litellm/)
+  * [Repositorio](https://github.com/BerriAI/litellm)
+  * [Documentacion](https://docs.litellm.ai/)
+  * [Web](https://www.litellm.ai/)
+
 
 **Testing / QA**
 
@@ -162,6 +168,7 @@ uv add pydantic-settings
 uv add pipdeptree
 uv add tiktoken
 uv add streamlit
+uv add litellm
 
 # Desarrollo
 uv add --dev ruff

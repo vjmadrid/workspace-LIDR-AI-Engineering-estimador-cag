@@ -8,11 +8,17 @@ from app.exceptions.estimate_exceptions import EstimateServiceException
 from app.services.estimate_services import EstimateService
 
 
-def build_service(provider: LLMProvider, openai_service=None, anthropic_service=None):
+def build_service(
+    provider: LLMProvider,
+    openai_service=None,
+    anthropic_service=None,
+    llmlite_service=None,
+):
     return EstimateService(
         settings=SimpleNamespace(LLM_PROVIDER=provider),
         openai_service=openai_service or Mock(),
         anthropic_service=anthropic_service or Mock(),
+        llmlite_service=llmlite_service or Mock(),
     )
 
 
@@ -48,6 +54,26 @@ def test_estimate_from_transcript_delegates_to_anthropic_service():
     assert response == "anthropic-response"
     anthropic_service.estimate_from_transcript.assert_called_once_with("transcript")
     openai_service.estimate_from_transcript.assert_not_called()
+
+
+def test_estimate_from_transcript_delegates_to_llmlite_service():
+    openai_service = Mock()
+    anthropic_service = Mock()
+    llmlite_service = Mock()
+    llmlite_service.estimate_from_transcript.return_value = "llmlite-response"
+    service = build_service(
+        LLMProvider.LLMLITE,
+        openai_service=openai_service,
+        anthropic_service=anthropic_service,
+        llmlite_service=llmlite_service,
+    )
+
+    response = service.estimate_from_transcript("transcript")
+
+    assert response == "llmlite-response"
+    llmlite_service.estimate_from_transcript.assert_called_once_with("transcript")
+    openai_service.estimate_from_transcript.assert_not_called()
+    anthropic_service.estimate_from_transcript.assert_not_called()
 
 
 def test_estimate_from_transcript_preserves_service_exceptions():

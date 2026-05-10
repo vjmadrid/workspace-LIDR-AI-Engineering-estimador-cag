@@ -8,9 +8,12 @@ ESTIMATE_OPENAI_ENDPOINT = f"{ROOT_ENDPOINT}/openai"
 ESTIMATE_OPENAI_STREAM_ENDPOINT = f"{ROOT_ENDPOINT}/openai/stream"
 ESTIMATE_ANTHROPIC_ENDPOINT = f"{ROOT_ENDPOINT}/anthropic"
 
+ESTIMATE_LLMLITE_ENDPOINT = f"{ROOT_ENDPOINT}/llmlite"
+
 # OpenAI Configuration
 
 OPENAI_MODEL_DEFAULT = "gpt-4o-mini"
+LLMLITE_MODEL_DEFAULT = "gpt-4o-mini"
 
 # Anthropic Configuration
 
