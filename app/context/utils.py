@@ -1,6 +1,12 @@
+import json
+from typing import Literal
+
 from app.context.basic_examples import BASIC_ESTIMATION_EXAMPLES
 from app.context.canonical_examples import CANONICAL_EXAMPLES
 from app.context.dtos import CanonicalExample
+
+ExampleFormat = Literal["markdown", "json", "narrative"]
+
 
 class ContextExamplesUtil:
 
@@ -19,6 +25,7 @@ class ContextExamplesUtil:
 
         return "\n".join(context)
 
+
 class BasicExamplesUtil:
 
     @staticmethod
@@ -33,6 +40,7 @@ class BasicExamplesUtil:
             )
         return "\n".join(parts)
 
+
 class CanonicalExamplesUtil:
 
     @staticmethod
@@ -40,6 +48,7 @@ class CanonicalExamplesUtil:
         """Return the first n canonical examples, capped at the available pool."""
         return CANONICAL_EXAMPLES[: max(0, min(n, len(CANONICAL_EXAMPLES)))]
 
+    @staticmethod
     def format_examples_for_prompt(
         examples: list[CanonicalExample],
         fmt: ExampleFormat = "markdown",

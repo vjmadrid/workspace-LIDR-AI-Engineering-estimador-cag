@@ -2,7 +2,7 @@
 #  Makefile for Project Management
 # ============================================
 
-include .env
+-include .env
 export
 
 # =====================
@@ -25,6 +25,8 @@ MAIN_FILE := app/main.py
 
 # Uvicorn entry point for running the application
 UVICORN_START_FILE := app.main:app
+SERVICE_HOST ?= 0.0.0.0
+SERVICE_PORT ?= 8000
 
 # =====================
 # Streamlit Configuration
@@ -39,7 +41,7 @@ STREAMLIT_PORT ?= 8500
 # Commands
 UV = uv
 PYTHON = $(UV) run python
-UVICORN = uvicorn
+UVICORN = $(UV) run uvicorn
 
 # =====================
 # Pytest Configuration
