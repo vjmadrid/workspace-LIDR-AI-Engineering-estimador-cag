@@ -1,5 +1,5 @@
 from app.context.estimate_prompts import DEFAULT_SYSTEM_PROMPT_1
-from app.context.examples import ESTIMATION_EXAMPLES
+from app.context.basic_examples import BASIC_ESTIMATION_EXAMPLES
 
 
 class EstimateOpenAIPromptBuilder:
@@ -14,7 +14,7 @@ class EstimateOpenAIPromptBuilder:
     def __init__(
         self,
         system_prompt: str = DEFAULT_SYSTEM_PROMPT_1,
-        examples: list[dict] = ESTIMATION_EXAMPLES,
+        examples: list[dict] = BASIC_ESTIMATION_EXAMPLES,
     ):
         self.system_prompt = system_prompt
         self.examples = examples

@@ -1,12 +1,14 @@
 
-from app.context.examples import ESTIMATION_EXAMPLES
-from app.context.utils import ContextExamplesUtil
+from app.context.basic_examples import BASIC_ESTIMATION_EXAMPLES
+from app.context.utils import BasicExamplesUtil
 
 class EstimatePromptBuilderUtil:
+
     @staticmethod
     def build_system_prompt() -> str:
         """Construct the system prompt with role definition and reference examples."""
-        examples_text = ContextExamplesUtil.format_examples_for_prompt(ESTIMATION_EXAMPLES)
+        examples_text = BasicExamplesUtil.format_examples_for_prompt(BASIC_ESTIMATION_EXAMPLES)
+
         return (
             "You are a senior software consultant with 15+ years of experience in project "
         "estimation. Your task is to produce a detailed software project estimation based "

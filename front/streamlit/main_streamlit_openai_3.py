@@ -11,8 +11,8 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from app.config import get_settings  # noqa: E402
 from app.context.estimate_prompts import SYSTEM_PROMPT  # noqa: E402
-from app.context.examples import ESTIMATION_EXAMPLES, format_examples_for_prompt  # noqa: E402
-from app.response.estimate_responses import EstimateResponse  # noqa: E402
+from app.context.basic_examples import BASIC_ESTIMATION_EXAMPLES, format_examples_for_prompt  # noqa: E402
+from app.responses.estimate_responses import EstimateResponse  # noqa: E402
 from front.streamlit.client.estimate_openai_client import (  # noqa: E402
     EstimateBackendError,
     EstimateOpenAIBackendClient,
@@ -245,7 +245,7 @@ def handle_sidebar():
         st.subheader("Contexto estático inyectado")
         st.text_area(
             "Estimaciones de ejemplo",
-            value=format_examples_for_prompt(ESTIMATION_EXAMPLES),
+            value=format_examples_for_prompt(BASIC_ESTIMATION_EXAMPLES),
             height=320,
             disabled=True,
             label_visibility="collapsed",

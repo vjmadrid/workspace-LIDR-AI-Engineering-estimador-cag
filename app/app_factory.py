@@ -19,8 +19,10 @@ def create_app() -> FastAPI:
     Factory function to create and configure the FastAPI application
     This allows for better modularity and testing
     """
+    logger.info("Starting the FastAPI server ...")
 
     # Load settings
+    logger.info("- Loading application settings")
     settings = get_settings()
 
     # Application instance
@@ -30,6 +32,8 @@ def create_app() -> FastAPI:
         description="API para generar estimaciones de proyectos de software basadas en resúmenes de reuniones.",
     )
 
+    # Log important configuration values
+    logger.info("- Application settings loaded")
     logger.info("APP_ENV: %s", settings.APP_ENV.value)
     logger.info("LLM_PROVIDER: %s", settings.LLM_PROVIDER.value)
     logger.info("OpenAI Model: %s", settings.OPENAI_MODEL)
@@ -37,6 +41,7 @@ def create_app() -> FastAPI:
     logger.info("LiteLLM Model: %s", settings.LLMLITE_MODEL)
 
     # Add CORS Support
+    logger.info("- Adding CORS middleware")
     app.add_middleware(
         CORSMiddleware,
         allow_origins=["*"],
@@ -46,6 +51,7 @@ def create_app() -> FastAPI:
     )
 
     # Add API routers
+    logger.info("- Adding API routers")
     app.include_router(manager_router)
     app.include_router(estimation_router)
     app.include_router(estimation_openai_router)

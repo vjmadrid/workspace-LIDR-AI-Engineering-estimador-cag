@@ -6,7 +6,7 @@ from app.prompts.builders.utils import EstimatePromptBuilderUtil
 
 def test_build_system_prompt_returns_expected_base_instructions(monkeypatch):
     monkeypatch.setattr(
-        prompt_builder_utils.ContextExamplesUtil,
+        prompt_builder_utils.BasicExamplesUtil,
         "format_examples_for_prompt",
         Mock(return_value="FORMATTED EXAMPLES"),
     )
@@ -27,7 +27,7 @@ def test_build_system_prompt_returns_expected_base_instructions(monkeypatch):
 
 def test_build_system_prompt_appends_formatted_examples(monkeypatch):
     monkeypatch.setattr(
-        prompt_builder_utils.ContextExamplesUtil,
+        prompt_builder_utils.BasicExamplesUtil,
         "format_examples_for_prompt",
         Mock(return_value="FORMATTED EXAMPLES"),
     )
@@ -40,7 +40,7 @@ def test_build_system_prompt_appends_formatted_examples(monkeypatch):
 def test_build_system_prompt_formats_estimation_examples(monkeypatch):
     format_examples_for_prompt = Mock(return_value="FORMATTED EXAMPLES")
     monkeypatch.setattr(
-        prompt_builder_utils.ContextExamplesUtil,
+        prompt_builder_utils.BasicExamplesUtil,
         "format_examples_for_prompt",
         format_examples_for_prompt,
     )
@@ -48,13 +48,13 @@ def test_build_system_prompt_formats_estimation_examples(monkeypatch):
     EstimatePromptBuilderUtil.build_system_prompt()
 
     format_examples_for_prompt.assert_called_once_with(
-        prompt_builder_utils.ESTIMATION_EXAMPLES
+        prompt_builder_utils.BASIC_ESTIMATION_EXAMPLES
     )
 
 
 def test_build_system_prompt_returns_non_empty_string(monkeypatch):
     monkeypatch.setattr(
-        prompt_builder_utils.ContextExamplesUtil,
+        prompt_builder_utils.BasicExamplesUtil,
         "format_examples_for_prompt",
         Mock(return_value="FORMATTED EXAMPLES"),
     )

@@ -1,4 +1,4 @@
-ESTIMATION_EXAMPLES = [
+BASIC_ESTIMATION_EXAMPLES = [
     {
         "meeting_summary": "El cliente necesita una plataforma web de gestión de inventario...",
         "estimation": """

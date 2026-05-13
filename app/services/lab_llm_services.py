@@ -1,7 +1,7 @@
 from openai import OpenAI
 
 from app.config import get_settings
-from app.context.examples import ESTIMATION_EXAMPLES
+from app.context.basic_examples import BASIC_ESTIMATION_EXAMPLES
 
 settings = get_settings()
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
@@ -32,7 +32,7 @@ def estimate_from_transcript(transcript: str, model: str = "gpt-4o-mini") -> str
                     "role": "user",
                     "content": f"Ejemplo de entrada\nResumen de reunión: {ex['meeting_summary']}\n\nEjemplo de salida\n{ex['estimation']}",
                 }
-                for ex in ESTIMATION_EXAMPLES
+                for ex in BASIC_ESTIMATION_EXAMPLES
             ],
             {"role": "user", "content": f"Resumen de reunión: {transcript}"},
         ],
