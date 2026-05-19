@@ -35,6 +35,7 @@ class Settings(BaseSettings):
         env_file=".env",
         env_file_encoding="utf-8",
         case_sensitive=False,
+        extra="ignore"
     )
 
     BASE_DIR: pathlib.Path = pathlib.Path(__file__).parent.parent
@@ -60,7 +61,7 @@ class Settings(BaseSettings):
     # LiteLLM Settings
     LLMLITE_MODEL: str = "gpt-4o-mini"
 
-    # LLM Advanced Settings
+    # LiteLLM Advanced Settings
     PRIMARY_MODEL: str = "gpt-4o-mini"
     FALLBACK_MODEL: str = "claude-haiku-4-5-20251001"
 
