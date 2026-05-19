@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EstimateLLMWrapperRequest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["description", "project_type", "detail_level", "output_format"],
+  "properties": {
+    "description": {
+      "type": "string",
+      "minLength": 20,
+      "maxLength": 80000,
+      "description": "Free-text description or transcription of the project to estimate."
+    },
+    "project_type": {
+      "type": "string",
+      "enum": ["mobile_app", "web_saas", "internal_tool", "data_pipeline"],
+      "description": "Coarse-grained project category."
+    },
+    "detail_level": {
+      "type": "string",
+      "enum": ["summary", "medium", "detailed"],
+      "description": "How deep the estimation should go."
+    },
+    "output_format": {
+      "type": "string",
+      "enum": ["phases_table", "line_items", "narrative"],
+      "description": "Shape of the rendered estimation."
+    }
+  }
+}

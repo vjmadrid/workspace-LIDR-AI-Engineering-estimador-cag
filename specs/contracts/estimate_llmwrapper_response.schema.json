@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EstimationLLMWrapperResponse",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["text", "prompt_version"],
+  "properties": {
+    "text": {
+      "type": "string",
+      "description": "Estimation rendered by the LLM as free text."
+    },
+    "prompt_version": {
+      "type": "string",
+      "description": "Identifier of the prompt template used."
+    }
+  }
+}

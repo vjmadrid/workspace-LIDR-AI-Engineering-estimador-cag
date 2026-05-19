@@ -6,9 +6,9 @@ from fastapi.testclient import TestClient
 
 from app.app_factory import create_app
 from app.dtos.estimate_dtos import EstimateResponseDTO
+from app.prompts.builders.estimate_openai_prompt_builder import EstimateOpenAIPromptBuilder
 from app.requests.estimate_requests import EstimateRequest
 from app.responses.estimate_responses import generate_estimate_response
-from app.prompts.builders.estimate_openai_prompt_builder import EstimateOpenAIPromptBuilder
 
 ROOT_DIR = Path(__file__).resolve().parents[3]
 SPECS_DIR = ROOT_DIR / "specs"
