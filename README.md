@@ -100,6 +100,12 @@ N/A
   * [Repositorio](https://github.com/encode/httpx)
   * [Documentacion](https://www.python-httpx.org/)
   * [Web](https://www.python-httpx.org/)
+* **redis** : Cliente oficial de Redis para Python, utilizado para interactuar con bases de datos Redis.
+  * [Pypi](https://pypi.org/project/redis/)
+  * [Repositorio](https://github.com/redis/redis-py)
+  * [Documentacion](https://redis-py.readthedocs.io/en/stable/)
+  * [Web](https://github.com/redis/redis-py)
+
 
 
 **Testing / QA**
@@ -175,6 +181,7 @@ uv add tiktoken
 uv add streamlit
 uv add litellm
 uv add httpx
+uv add redis
 
 # Desarrollo
 uv add --dev ruff
