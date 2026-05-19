@@ -135,7 +135,11 @@ N/A
   * [Repositorio](https://github.com/pytest-dev/pytest-asyncio)
   * [Documentacion](https://pytest-asyncio.readthedocs.io/en/stable/)
   * [Web](https://pytest-asyncio.readthedocs.io/en/stable/)
-
+* **fakeredis** : Biblioteca de Python que proporciona una implementación simulada de Redis para pruebas unitarias.
+  * [Pypi](https://pypi.org/project/fakeredis/)
+  * [Repositorio](https://github.com/cunla/fakeredis-py)
+  * [Documentacion](https://fakeredis.readthedocs.io/en/latest/)
+  * [Web](https://fakeredis.readthedocs.io/en/latest/)
 
 
 ## Pre-Requisitos
@@ -199,6 +203,7 @@ uv add httpx
 uv add redis
 uv add jinja2
 uv add structlog
+uv add fakeredis
 
 # Desarrollo
 uv add --dev ruff
