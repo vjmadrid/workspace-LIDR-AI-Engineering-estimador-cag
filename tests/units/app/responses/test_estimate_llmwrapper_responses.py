@@ -6,22 +6,24 @@ from tests.units.app.responses.estimate_response_factory import (
     EstimateLLMWrapperResponseFactory,
 )
 
+INVALID_REQUIRED_FIELD_OVERRIDES = [
+    {"text": None},
+    {"prompt_version": None},
+]
 
-@pytest.mark.parametrize(
-    "overrides",
-    [
-        {"text": None},
-        {"prompt_version": None},
-    ],
-)
-def test_estimate_llmwrapper_response_rejects_invalid_required_fields(overrides):
+
+def assert_response_is_invalid(**overrides) -> None:
     with pytest.raises(ValidationError):
         EstimateLLMWrapperResponseFactory.build(**overrides)
 
 
+@pytest.mark.parametrize("overrides", INVALID_REQUIRED_FIELD_OVERRIDES)
+def test_estimate_llmwrapper_response_rejects_invalid_required_fields(overrides):
+    assert_response_is_invalid(**overrides)
+
+
 def test_estimate_llmwrapper_response_rejects_extra_fields():
-    with pytest.raises(ValidationError):
-        EstimateLLMWrapperResponseFactory.build(unexpected="extra")
+    assert_response_is_invalid(unexpected="extra")
 
 
 def test_estimate_llmwrapper_response_is_created_from_factory_defaults():

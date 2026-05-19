@@ -18,14 +18,14 @@ from app.constants.estimate_constants import ESTIMATE_LLMWRAPPER_ENDPOINT
 from app.dependencies import get_llm_wrapper
 from app.main import app
 
-
 ENDPOINT = f"/api/v1{ESTIMATE_LLMWRAPPER_ENDPOINT}"
+FAKE_ESTIMATION = "fake estimation"
 
 
 class FakeWrapper:
     """Records the kwargs of every ``complete`` call and returns a canned dict."""
 
-    def __init__(self, response_text: str = "fake estimation") -> None:
+    def __init__(self, response_text: str = FAKE_ESTIMATION) -> None:
         self.response_text = response_text
         self.calls: list[dict[str, Any]] = []
 
@@ -59,20 +59,32 @@ VALID_PAYLOAD = {
 }
 
 
+def post_estimation(client: TestClient, payload: dict | None = None):
+    return client.post(ENDPOINT, json=payload or VALID_PAYLOAD)
+
+
+def assert_validation_error_for_field(response, field: str) -> None:
+    assert response.status_code == 422
+    assert any(error["loc"][-1] == field for error in response.json()["detail"])
+
+
 def test_valid_payload_returns_text_and_prompt_version(
     client: TestClient, fake_wrapper: FakeWrapper
 ) -> None:
-    response = client.post(ENDPOINT, json=VALID_PAYLOAD)
+    response = post_estimation(client)
+
     assert response.status_code == 200
-    body = response.json()
-    assert body["text"] == "fake estimation"
-    assert body["prompt_version"] == "v1"
+    assert response.json() == {
+        "text": FAKE_ESTIMATION,
+        "prompt_version": "v1",
+    }
 
 
 def test_endpoint_passes_separate_system_and_user_messages(
     client: TestClient, fake_wrapper: FakeWrapper
 ) -> None:
-    client.post(ENDPOINT, json=VALID_PAYLOAD)
+    post_estimation(client)
+
     assert len(fake_wrapper.calls) == 1
     call = fake_wrapper.calls[0]
     assert "system_prompt" in call
@@ -87,21 +99,20 @@ def test_endpoint_passes_separate_system_and_user_messages(
 
 def test_missing_project_type_returns_422(client: TestClient, fake_wrapper: FakeWrapper) -> None:
     payload = {k: v for k, v in VALID_PAYLOAD.items() if k != "project_type"}
-    response = client.post(ENDPOINT, json=payload)
-    assert response.status_code == 422
-    detail = response.json()["detail"]
-    assert any(err["loc"][-1] == "project_type" for err in detail)
+    response = post_estimation(client, payload)
+
+    assert_validation_error_for_field(response, "project_type")
 
 
 def test_invalid_enum_value_returns_422(client: TestClient, fake_wrapper: FakeWrapper) -> None:
     payload = {**VALID_PAYLOAD, "project_type": "not_a_real_enum"}
-    response = client.post(ENDPOINT, json=payload)
-    assert response.status_code == 422
-    detail = response.json()["detail"]
-    assert any(err["loc"][-1] == "project_type" for err in detail)
+    response = post_estimation(client, payload)
+
+    assert_validation_error_for_field(response, "project_type")
 
 
 def test_short_description_returns_422(client: TestClient, fake_wrapper: FakeWrapper) -> None:
     payload = {**VALID_PAYLOAD, "description": "too short"}
-    response = client.post(ENDPOINT, json=payload)
+    response = post_estimation(client, payload)
+
     assert response.status_code == 422
