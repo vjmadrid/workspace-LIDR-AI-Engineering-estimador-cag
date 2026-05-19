@@ -25,7 +25,7 @@ services:
 
     # Health check using Python's stdlib (curl is not available in slim images).
     healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/manager/health')"]
       interval: 30s
       timeout: 5s
       start_period: 10s
