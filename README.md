@@ -11,6 +11,7 @@
     - [Instalación de entorno virtual](#instalación-de-entorno-virtual)
     - [Instalación de dependencias](#instalación-de-dependencias)
   - [Uso](#uso)
+    - [Operaciones sobre la aplicación](#operaciones-sobre-la-aplicación)
     - [Problema "Address already in use"](#problema-address-already-in-use)
     - [Ejemplo de curl](#ejemplo-de-curl)
   - [Versionado](#versionado)
@@ -214,6 +215,14 @@ uv add --dev pytest-asyncio
 ```
 
 ## Uso
+
+### Operaciones sobre la aplicación
+
+Todas las operaciones sobre la aplicación se realizan a través de Makefile, para ver las operaciones disponibles ejecutar el siguiente comando:
+
+```bash
+make help
+```
 
 ### Problema "Address already in use"
 

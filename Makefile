@@ -64,6 +64,12 @@ PYTEST_PARAMETER_DEBUG := $(PYTEST_PARAMETER_CONSOLE)
 PYTEST_PARAMETER := -ra -vv $(PYTEST_PARAMETER_DEBUG)
 
 # =====================
+# Docker Configuration
+# =====================
+
+DOCKER_COMPOSE_FILE := docker-compose.yml
+
+# =====================
 # Help
 # =====================
 
@@ -196,17 +202,21 @@ test-coverage: ## Run tests with coverage
 # Docker
 # =====================
 
-docker-build:
-	docker compose build
+docker-build: ## Build the Docker image
+	docker compose -f $(DOCKER_COMPOSE_FILE) build
 
-docker-up:
-	docker compose up --build
+docker-up: ## Start the application with Docker Compose
+	docker compose -f $(DOCKER_COMPOSE_FILE) up --build
 
-docker-down:
-	docker compose down
+docker-down: ## Stop the application and remove containers
+	docker compose -f $(DOCKER_COMPOSE_FILE) down
 
-docker-logs:
-	docker compose logs -f estimator
+docker-logs: ## Follow the logs of the estimator service
+	docker compose -f $(DOCKER_COMPOSE_FILE) logs -f estimator
+
+docker-ps: ## Show the status of Docker containers
+	docker compose -f $(DOCKER_COMPOSE_FILE) ps
+
 
 # =====================
 # Support
