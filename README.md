@@ -110,7 +110,11 @@ N/A
   * [Repositorio](https://github.com/pallets/jinja/)
   * [Documentacion](https://jinja.palletsprojects.com/en/stable/)
   * [Web](https://jinja.palletsprojects.com/en/stable/)
-
+* **structlog** : Biblioteca de registro estructurado para Python, utilizada para mejorar la legibilidad y el análisis de los registros.
+  * [Pypi](https://pypi.org/project/structlog/)
+  * [Repositorio](https://github.com/hynek/structlog)
+  * [Documentacion](https://www.structlog.org/en/stable/)
+  * [Web](https://www.structlog.org/en/stable/)
 
 **Testing / QA**
 
@@ -187,6 +191,7 @@ uv add litellm
 uv add httpx
 uv add redis
 uv add jinja2
+uv add structlog
 
 # Desarrollo
 uv add --dev ruff
