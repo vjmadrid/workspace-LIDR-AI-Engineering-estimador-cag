@@ -130,6 +130,13 @@ N/A
   * [Pypi](https://pypi.org/project/pytest-randomly/)
   * [Repositorio](https://github.com/pytest-dev/pytest-randomly)
   * [Documentacion](https://github.com/pytest-dev/pytest-randomly)
+* **pytest-asyncio** : Extensión de pytest que proporciona soporte para tests asíncronos
+  * [Pypi](https://pypi.org/project/pytest-asyncio/)
+  * [Repositorio](https://github.com/pytest-dev/pytest-asyncio)
+  * [Documentacion](https://pytest-asyncio.readthedocs.io/en/stable/)
+  * [Web](https://pytest-asyncio.readthedocs.io/en/stable/)
+
+
 
 ## Pre-Requisitos
 
@@ -198,6 +205,7 @@ uv add --dev ruff
 uv add --dev pytest
 uv add --dev pytest-cov
 uv add --dev pytest-randomly
+uv add --dev pytest-asyncio
 ```
 
 ## Uso
