@@ -9,7 +9,8 @@ from app.routers.manager_routes import router as manager_router
 from app.routers.estimate_routes import router as estimation_router
 from app.routers.estimate_openai_routes import router as estimation_openai_router
 from app.routers.estimate_anthropic_routes import router as estimation_anthropic_router
-from app.routers.estimate_llmlite import router as estimation_llmlite_router
+from app.routers.estimate_llmlite_routes import router as estimation_llmlite_router
+from app.routers.estimate_llmwrapper_routes import router as estimation_llmwrapper_router
 
 
 def log_settings_environment_variables(settings: Settings, log) -> None:
@@ -100,5 +101,5 @@ def create_app() -> FastAPI:
     app.include_router(estimation_openai_router)
     app.include_router(estimation_anthropic_router)
     app.include_router(estimation_llmlite_router)
-
+    app.include_router(estimation_llmwrapper_router)
     return app
