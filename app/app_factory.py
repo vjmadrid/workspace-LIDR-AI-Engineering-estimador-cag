@@ -1,4 +1,6 @@
 import structlog
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -44,35 +46,46 @@ def configure_logging() -> None:
         cache_logger_on_first_use=True,
     )
 
-def create_app() -> FastAPI:
-    """
-    Factory function to create and configure the FastAPI application
-    This allows for better modularity and testing
-    """
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Application startup and shutdown lifecycle."""
     configure_logging()
     log = structlog.get_logger()
 
     settings = get_settings()
-
 
     log.info("Starting the FastAPI server ...")
 
     # Load settings
     log.info("- Loading application settings")
 
+    log.info("application_started", environment=settings.APP_ENV)
+
+    # Log loaded configuration values
+    log_settings_environment_variables(settings, log)
+
+    yield
+    log.info("application_shutdown")
+
+def create_app() -> FastAPI:
+    """
+    Factory function to create and configure the FastAPI application
+    This allows for better modularity and testing
+    """
+    settings = get_settings()
+
     # Application instance
     app = FastAPI(
         title=settings.APP_NAME,
         version="0.1.0",
         description="API para generar estimaciones de proyectos de software basadas en resúmenes de reuniones.",
+        docs_url="/docs",
+        redoc_url="/redoc",
+        lifespan=lifespan,
     )
-
-    # Log loaded configuration values
-    log_settings_environment_variables(settings, log)
 
 
     # Add CORS Support
-    log.info("- Adding CORS middleware")
     app.add_middleware(
         CORSMiddleware,
         allow_origins=["*"],
@@ -82,7 +95,6 @@ def create_app() -> FastAPI:
     )
 
     # Add API routers
-    log.info("- Adding API routers")
     app.include_router(manager_router)
     app.include_router(estimation_router)
     app.include_router(estimation_openai_router)
