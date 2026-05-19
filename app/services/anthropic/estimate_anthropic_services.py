@@ -1,4 +1,4 @@
-import logging
+import structlog
 
 from anthropic import Anthropic
 
@@ -9,8 +9,8 @@ from app.dtos.estimate_dtos import EstimateResponseDTO
 from app.exceptions.estimate_exceptions import EstimateServiceException
 from app.prompts.builders.estimate_openai_prompt_builder import EstimateOpenAIPromptBuilder
 
-logger = logging.getLogger(__name__)
-
+# Logging Configuration
+log = structlog.get_logger()
 
 class EstimateAnthropicService:
     def __init__(
@@ -35,7 +35,7 @@ class EstimateAnthropicService:
         model: str = ANTHROPIC_MODEL_DEFAULT,
         max_tokens: int = ANTHROPIC_MAX_TOKENS_DEFAULT,
     ) -> EstimateResponseDTO:
-        logger.info("Estimating transcript with Anthropic model=%s", model)
+        log.info("Estimating transcript with Anthropic model=%s", model)
 
         # Prepare prompts
         messages = self._prompt_builder.build_messages(transcript)
@@ -50,7 +50,7 @@ class EstimateAnthropicService:
                 temperature=0.2,
             )
         except Exception as exc:
-            logger.exception("Error while generating estimation with Anthropic")
+            log.exception("Error while generating estimation with Anthropic")
             raise EstimateServiceException("An error occurred while generating the estimation") from exc
 
         if response.usage is None:
@@ -60,9 +60,9 @@ class EstimateAnthropicService:
         if not response_content:
             raise EstimateServiceException("The LLM response content is empty")
 
-        logger.debug("Input tokens used: %s", response.usage.input_tokens)
-        logger.debug("Output tokens used: %s", response.usage.output_tokens)
-        logger.debug(
+        log.debug("Input tokens used: %s", response.usage.input_tokens)
+        log.debug("Output tokens used: %s", response.usage.output_tokens)
+        log.debug(
             "Total tokens used: %s",
             response.usage.input_tokens + response.usage.output_tokens,
         )

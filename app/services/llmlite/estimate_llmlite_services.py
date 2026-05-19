@@ -1,4 +1,4 @@
-import logging
+import structlog
 from collections.abc import Callable
 from typing import Any
 
@@ -10,8 +10,8 @@ from app.dtos.estimate_dtos import EstimateResponseDTO
 from app.exceptions.estimate_exceptions import EstimateServiceException
 from app.prompts.builders.estimate_prompt_builder import EstimatePromptBuilder
 
-logger = logging.getLogger(__name__)
-
+# Logging Configuration
+log = structlog.get_logger()
 
 class EstimateLLMLiteService:
     def __init__(
@@ -39,7 +39,7 @@ class EstimateLLMLiteService:
         model: str | None = None,
     ) -> EstimateResponseDTO:
         model = model or getattr(self._settings, "LLMLITE_MODEL", LLMLITE_MODEL_DEFAULT)
-        logger.info("Estimating transcript with LiteLLM model=%s", model)
+        log.info("Estimating transcript with LiteLLM model=%s", model)
 
         messages = self._prompt_builder.build_messages(transcript)
 
@@ -50,13 +50,13 @@ class EstimateLLMLiteService:
                 temperature=0.2,
             )
         except Exception as exc:
-            logger.exception("Error while generating estimation with LiteLLM")
+            log.exception("Error while generating estimation with LiteLLM")
             raise EstimateServiceException("An error occurred while generating the estimation") from exc
 
         usage = self._get_usage(response)
         if usage is None:
             # Some LiteLLM providers may omit usage metadata; keep the estimation and report zero token/cost data.
-            logger.warning("LiteLLM response did not include token usage metadata for model=%s", model)
+            log.warning("LiteLLM response did not include token usage metadata for model=%s", model)
 
         response_content = self._get_response_content(response)
         if not response_content:
@@ -70,9 +70,9 @@ class EstimateLLMLiteService:
             prompt_tokens + completion_tokens,
         )
 
-        logger.debug("Input tokens used: %s", prompt_tokens)
-        logger.debug("Output tokens used: %s", completion_tokens)
-        logger.debug("Total tokens used: %s", total_tokens)
+        log.debug("Input tokens used: %s", prompt_tokens)
+        log.debug("Output tokens used: %s", completion_tokens)
+        log.debug("Total tokens used: %s", total_tokens)
 
         token_costs = self._calculate_cost(
             model=model,

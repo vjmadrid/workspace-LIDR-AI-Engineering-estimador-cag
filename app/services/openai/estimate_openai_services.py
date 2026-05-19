@@ -1,4 +1,4 @@
-import logging
+import structlog
 from collections.abc import Iterator
 from typing import Any
 
@@ -12,8 +12,8 @@ from app.dtos.estimate_dtos import EstimateResponseDTO, generate_openai_estimate
 from app.exceptions.estimate_exceptions import EstimateServiceException
 from app.prompts.builders.estimate_openai_prompt_builder import EstimateOpenAIPromptBuilder
 
-logger = logging.getLogger(__name__)
-
+# Logging Configuration
+log = structlog.get_logger()
 
 class EstimateOpenAIService:
     def __init__(
@@ -37,14 +37,14 @@ class EstimateOpenAIService:
         transcript: str,
         model: str = OPENAI_MODEL_DEFAULT,
     ) -> EstimateResponseDTO:
-        logger.info("Estimating transcript with OpenAI model=%s", model)
+        log.info("Estimating transcript with OpenAI model=%s", model)
 
         # Prepare prompts
         messages = self._prompt_builder.build_messages(transcript)
 
         # Count tokens before making the API call to have an estimate of the input tokens
         input_tokens = OpenAITokenUtil.count_tokens(messages, model)
-        logger.debug("Estimated prompt tokens: %s", input_tokens)
+        log.debug("Estimated prompt tokens: %s", input_tokens)
 
         try:
             response = self.client.chat.completions.create(
@@ -53,7 +53,7 @@ class EstimateOpenAIService:
                 temperature=0.2,
             )
         except Exception as exc:
-            logger.exception("Error while generating estimation with OpenAI")
+            log.exception("Error while generating estimation with OpenAI")
             raise EstimateServiceException("An error occurred while generating the estimation") from exc
 
         if response.usage is None:
@@ -65,9 +65,9 @@ class EstimateOpenAIService:
 
         estimate_response_dto = generate_openai_estimate_response_dto(LLMProvider.OPENAI, model, response)
 
-        logger.debug("Input tokens used: %s", response.usage.prompt_tokens)
-        logger.debug("Output tokens used: %s", response.usage.completion_tokens)
-        logger.debug("Total tokens used: %s", response.usage.total_tokens)
+        log.debug("Input tokens used: %s", response.usage.prompt_tokens)
+        log.debug("Output tokens used: %s", response.usage.completion_tokens)
+        log.debug("Total tokens used: %s", response.usage.total_tokens)
 
         return estimate_response_dto
 
@@ -76,7 +76,7 @@ class EstimateOpenAIService:
         transcript: str,
         model: str = OPENAI_MODEL_DEFAULT,
     ) -> Iterator[dict[str, Any]]:
-        logger.info("Streaming transcript estimation with OpenAI model=%s", model)
+        log.info("Streaming transcript estimation with OpenAI model=%s", model)
 
         messages = self._prompt_builder.build_messages(transcript)
 
@@ -89,7 +89,7 @@ class EstimateOpenAIService:
                 stream_options={"include_usage": True},
             )
         except Exception as exc:
-            logger.exception("Error while starting streaming estimation with OpenAI")
+            log.exception("Error while starting streaming estimation with OpenAI")
             raise EstimateServiceException("An error occurred while generating the estimation") from exc
 
         usage = None
@@ -106,7 +106,7 @@ class EstimateOpenAIService:
                         response_parts.append(content)
                         yield {"type": "delta", "content": content}
         except Exception as exc:
-            logger.exception("Error while streaming estimation with OpenAI")
+            log.exception("Error while streaming estimation with OpenAI")
             raise EstimateServiceException("An error occurred while generating the estimation") from exc
 
         response_content = "".join(response_parts).strip()
