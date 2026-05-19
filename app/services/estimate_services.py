@@ -9,6 +9,7 @@ from app.services.openai.estimate_openai_services import EstimateOpenAIService
 
 logger = logging.getLogger(__name__)
 
+
 class EstimateService:
     def __init__(
         self,
@@ -22,10 +23,7 @@ class EstimateService:
         self._anthropic_service = anthropic_service or EstimateAnthropicService(settings=self._settings)
         self._llmlite_service = llmlite_service or EstimateLLMLiteService(settings=self._settings)
 
-    def estimate_from_transcript(
-        self,
-        transcript: str
-    ) -> EstimateResponseDTO:
+    def estimate_from_transcript(self, transcript: str) -> EstimateResponseDTO:
         provider = self._settings.LLM_PROVIDER
         logger.info("generating_estimation provider=%s", provider.value)
 

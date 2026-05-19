@@ -37,7 +37,5 @@ class EstimateOpenAIPromptBuilder:
                 }
             )
 
-        messages.append(
-            {"role": "user", "content": f"Resumen de reunión: {transcript}"}
-        )
+        messages.append({"role": "user", "content": f"Resumen de reunión: {transcript}"})
         return messages

@@ -6,6 +6,7 @@ from tests.units.app.responses.estimate_response_factory import (
     EstimateResponseFactory,
 )
 
+
 @pytest.mark.parametrize(
     "overrides",
     [

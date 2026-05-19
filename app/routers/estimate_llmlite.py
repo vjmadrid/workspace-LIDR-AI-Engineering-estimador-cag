@@ -2,9 +2,7 @@ import logging
 
 from fastapi import APIRouter, HTTPException
 
-from app.constants.estimate_constants import (
-    ESTIMATE_LLMLITE_ENDPOINT
-)
+from app.constants.estimate_constants import ESTIMATE_LLMLITE_ENDPOINT
 from app.exceptions.estimate_exceptions import EstimateServiceException
 from app.requests.estimate_requests import EstimateRequest
 from app.responses.estimate_responses import EstimateResponse, generate_estimate_response
@@ -17,6 +15,7 @@ logger = logging.getLogger(__name__)
 estimateLLMLiteService = EstimateLLMLiteService()
 
 router = APIRouter(prefix="/api/v1", tags=["estimations"])
+
 
 @router.post(ESTIMATE_LLMLITE_ENDPOINT, response_model=EstimateResponse)
 async def estimate_llmlite_endpoint(request: EstimateRequest):

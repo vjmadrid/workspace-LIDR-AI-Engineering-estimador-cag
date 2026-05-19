@@ -19,21 +19,13 @@ class FakePromptBuilder:
 
 class FakeOpenAIClient:
     def __init__(self):
-        self.chat = SimpleNamespace(
-            completions=SimpleNamespace(create=self._create_completion)
-        )
+        self.chat = SimpleNamespace(completions=SimpleNamespace(create=self._create_completion))
         self.calls = []
 
     def _create_completion(self, **kwargs):
         self.calls.append(kwargs)
         return SimpleNamespace(
-            choices=[
-                SimpleNamespace(
-                    message=SimpleNamespace(
-                        content=" Estimacion generada desde OpenAI fake. "
-                    )
-                )
-            ],
+            choices=[SimpleNamespace(message=SimpleNamespace(content=" Estimacion generada desde OpenAI fake. "))],
             usage=SimpleNamespace(
                 prompt_tokens=100,
                 completion_tokens=50,
@@ -70,13 +62,7 @@ class FakeLLMLiteCompletion:
     def __call__(self, **kwargs):
         self.calls.append(kwargs)
         return SimpleNamespace(
-            choices=[
-                SimpleNamespace(
-                    message=SimpleNamespace(
-                        content=" Estimacion generada desde LiteLLM fake. "
-                    )
-                )
-            ],
+            choices=[SimpleNamespace(message=SimpleNamespace(content=" Estimacion generada desde LiteLLM fake. "))],
             usage=SimpleNamespace(
                 prompt_tokens=90,
                 completion_tokens=45,

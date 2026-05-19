@@ -18,9 +18,7 @@ if __name__ == "__main__":
     # Estimate
     print("\nEnviando transcripción a LLM ...\n")
 
-    estimation = estimateAnthropicService.estimate_from_transcript(
-        transcript=MESSAGE, model="claude-haiku-4-5-20251001"
-    )
+    estimation = estimateAnthropicService.estimate_from_transcript(transcript=MESSAGE, model="claude-haiku-4-5-20251001")
 
     print("\n=== ESTIMACIÓN GENERADA ===\n")
     print(estimation.response)

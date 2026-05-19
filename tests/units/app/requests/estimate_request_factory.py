@@ -2,9 +2,7 @@ from app.requests.estimate_requests import EstimateRequest
 
 
 class EstimateRequestFactory:
-    DEFAULT_TRANSCRIPTION = (
-        "Reunion para estimar una funcionalidad de autenticacion con email y password."
-    )
+    DEFAULT_TRANSCRIPTION = "Reunion para estimar una funcionalidad de autenticacion con email y password."
 
     @classmethod
     def build(cls, **overrides) -> EstimateRequest:

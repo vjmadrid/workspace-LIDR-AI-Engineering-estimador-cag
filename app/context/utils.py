@@ -9,7 +9,6 @@ ExampleFormat = Literal["markdown", "json", "narrative"]
 
 
 class ContextExamplesUtil:
-
     @staticmethod
     def build_context_examples():
         """
@@ -27,22 +26,16 @@ class ContextExamplesUtil:
 
 
 class BasicExamplesUtil:
-
     @staticmethod
     def format_examples_for_prompt(examples: list[dict]) -> str:
         """Format estimation examples into a string suitable for injection into a system prompt."""
         parts: list[str] = []
         for i, example in enumerate(examples, start=1):
-            parts.append(
-                f"--- EXAMPLE {i} ---\n"
-                f"Meeting Summary:\n{example['meeting_summary']}\n\n"
-                f"Estimation:\n{example['estimation']}\n"
-            )
+            parts.append(f"--- EXAMPLE {i} ---\nMeeting Summary:\n{example['meeting_summary']}\n\nEstimation:\n{example['estimation']}\n")
         return "\n".join(parts)
 
 
 class CanonicalExamplesUtil:
-
     @staticmethod
     def select_examples(n: int) -> list[CanonicalExample]:
         """Return the first n canonical examples, capped at the available pool."""
@@ -68,11 +61,7 @@ class CanonicalExamplesUtil:
 def _format_markdown(examples: list[CanonicalExample]) -> str:
     parts: list[str] = []
     for i, ex in enumerate(examples, start=1):
-        parts.append(
-            f"--- EXAMPLE {i} ---\n"
-            f"Meeting Summary:\n{ex.meeting_summary}\n\n"
-            f"Estimation:\n{ex.estimation_markdown}\n"
-        )
+        parts.append(f"--- EXAMPLE {i} ---\nMeeting Summary:\n{ex.meeting_summary}\n\nEstimation:\n{ex.estimation_markdown}\n")
     return "\n".join(parts)
 
 
@@ -81,10 +70,7 @@ def _format_json(examples: list[CanonicalExample]) -> str:
         {
             "meeting_summary": ex.meeting_summary,
             "title": ex.title,
-            "breakdown": [
-                {"task": task, "hours": hours, "cost_eur": cost}
-                for task, hours, cost in ex.breakdown
-            ],
+            "breakdown": [{"task": task, "hours": hours, "cost_eur": cost} for task, hours, cost in ex.breakdown],
             "totals": {"hours": ex.total_hours, "cost_eur": ex.total_cost},
             "team": ex.team,
             "duration_weeks": ex.duration_weeks,

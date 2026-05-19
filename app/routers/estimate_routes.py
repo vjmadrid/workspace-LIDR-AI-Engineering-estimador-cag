@@ -3,9 +3,7 @@ import logging
 
 from fastapi import APIRouter, HTTPException
 
-from app.constants.estimate_constants import (
-    ESTIMATE_ENDPOINT
-)
+from app.constants.estimate_constants import ESTIMATE_ENDPOINT
 from app.exceptions.estimate_exceptions import EstimateServiceException
 from app.requests.estimate_requests import EstimateRequest
 from app.responses.estimate_responses import EstimateResponse, generate_estimate_response
@@ -18,6 +16,7 @@ logger = logging.getLogger(__name__)
 estimateService = EstimateService()
 
 router = APIRouter(prefix="/api/v1", tags=["estimations"])
+
 
 @router.post(ESTIMATE_ENDPOINT, response_model=EstimateResponse)
 async def estimate_endpoint(request: EstimateRequest):
@@ -33,4 +32,3 @@ async def estimate_endpoint(request: EstimateRequest):
 
     # Build response
     return generate_estimate_response(response)
-

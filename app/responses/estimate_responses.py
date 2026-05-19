@@ -7,6 +7,7 @@ from app.dtos.estimate_dtos import EstimateResponseDTO
 # Responses (BaseModel)
 # =====================
 
+
 class EstimateTokenMetadataResponse(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -43,6 +44,7 @@ class EstimateResponse(BaseModel):
 # Generator functions
 # =====================
 
+
 def generate_estimate_response(estimate: EstimateResponseDTO):
 
     token_metadata = EstimateTokenMetadataResponse(
@@ -57,9 +59,7 @@ def generate_estimate_response(estimate: EstimateResponseDTO):
         total_token_cost=estimate.total_token_cost,
     )
 
-    metadata = EstimateMetadataResponse(
-        token_metadata=token_metadata, cost_metadata=cost_metadata
-    )
+    metadata = EstimateMetadataResponse(token_metadata=token_metadata, cost_metadata=cost_metadata)
 
     return EstimateResponse(
         provider=estimate.llm_provider,

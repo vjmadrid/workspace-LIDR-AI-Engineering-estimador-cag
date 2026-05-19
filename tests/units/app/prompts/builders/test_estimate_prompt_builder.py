@@ -71,21 +71,11 @@ def test_build_messages_includes_examples_between_system_and_transcript():
         },
         {
             "role": "user",
-            "content": (
-                "Ejemplo de entrada\n"
-                "Resumen de reunión: Crear autenticacion.\n\n"
-                "Ejemplo de salida\n"
-                "Backend: 8 horas"
-            ),
+            "content": ("Ejemplo de entrada\nResumen de reunión: Crear autenticacion.\n\nEjemplo de salida\nBackend: 8 horas"),
         },
         {
             "role": "user",
-            "content": (
-                "Ejemplo de entrada\n"
-                "Resumen de reunión: Crear dashboard.\n\n"
-                "Ejemplo de salida\n"
-                "Frontend: 13 horas"
-            ),
+            "content": ("Ejemplo de entrada\nResumen de reunión: Crear dashboard.\n\nEjemplo de salida\nFrontend: 13 horas"),
         },
         {
             "role": "user",

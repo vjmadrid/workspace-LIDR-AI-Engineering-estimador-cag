@@ -11,6 +11,7 @@ from app.prompts.builders.estimate_openai_prompt_builder import EstimateOpenAIPr
 
 logger = logging.getLogger(__name__)
 
+
 class EstimateAnthropicService:
     def __init__(
         self,
@@ -40,7 +41,6 @@ class EstimateAnthropicService:
         messages = self._prompt_builder.build_messages(transcript)
         system_prompt, anthropic_messages = self._to_anthropic_messages(messages)
 
-
         try:
             response = self.client.messages.create(
                 model=model,
@@ -51,14 +51,10 @@ class EstimateAnthropicService:
             )
         except Exception as exc:
             logger.exception("Error while generating estimation with Anthropic")
-            raise EstimateServiceException(
-                "An error occurred while generating the estimation"
-            ) from exc
+            raise EstimateServiceException("An error occurred while generating the estimation") from exc
 
         if response.usage is None:
-            raise EstimateServiceException(
-                "The LLM response did not include token usage metadata"
-            )
+            raise EstimateServiceException("The LLM response did not include token usage metadata")
 
         response_content = self._extract_text_response(response.content)
         if not response_content:

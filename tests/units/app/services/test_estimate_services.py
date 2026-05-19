@@ -78,9 +78,7 @@ def test_estimate_from_transcript_delegates_to_llmlite_service():
 
 def test_estimate_from_transcript_preserves_service_exceptions():
     openai_service = Mock()
-    openai_service.estimate_from_transcript.side_effect = EstimateServiceException(
-        "service failed"
-    )
+    openai_service.estimate_from_transcript.side_effect = EstimateServiceException("service failed")
     service = build_service(LLMProvider.OPENAI, openai_service=openai_service)
 
     with pytest.raises(EstimateServiceException, match="service failed"):

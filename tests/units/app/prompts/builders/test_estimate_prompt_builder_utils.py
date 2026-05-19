@@ -47,9 +47,7 @@ def test_build_system_prompt_formats_estimation_examples(monkeypatch):
 
     EstimatePromptBuilderUtil.build_system_prompt()
 
-    format_examples_for_prompt.assert_called_once_with(
-        prompt_builder_utils.BASIC_ESTIMATION_EXAMPLES
-    )
+    format_examples_for_prompt.assert_called_once_with(prompt_builder_utils.BASIC_ESTIMATION_EXAMPLES)
 
 
 def test_build_system_prompt_returns_non_empty_string(monkeypatch):

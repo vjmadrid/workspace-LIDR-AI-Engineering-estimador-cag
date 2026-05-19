@@ -13,6 +13,7 @@ from app.prompts.builders.estimate_openai_prompt_builder import EstimateOpenAIPr
 ROOT_DIR = Path(__file__).resolve().parents[3]
 SPECS_DIR = ROOT_DIR / "specs"
 
+
 def load_json(relative_path: str) -> dict:
     return json.loads((SPECS_DIR / relative_path).read_text(encoding="utf-8"))
 
@@ -27,14 +28,10 @@ class EstimateOpenAIScenarioTests(unittest.TestCase):
             llm_model=expected["llm_model"],
             response=expected["estimation"],
             num_tokens_input=expected["metadata"]["token_metadata"]["num_tokens_input"],
-            num_tokens_response=expected["metadata"]["token_metadata"][
-                "num_tokens_response"
-            ],
+            num_tokens_response=expected["metadata"]["token_metadata"]["num_tokens_response"],
             num_tokens_total=expected["metadata"]["token_metadata"]["num_tokens_total"],
             input_token_cost=expected["metadata"]["cost_metadata"]["input_token_cost"],
-            output_token_cost=expected["metadata"]["cost_metadata"][
-                "output_token_cost"
-            ],
+            output_token_cost=expected["metadata"]["cost_metadata"]["output_token_cost"],
             total_token_cost=expected["metadata"]["cost_metadata"]["total_token_cost"],
         )
 

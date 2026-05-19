@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+
 @dataclass
 class CanonicalExample:
     """A reference estimation expressed both as structured data and as Markdown.

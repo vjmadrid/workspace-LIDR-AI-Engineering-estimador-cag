@@ -18,14 +18,8 @@ def test_estimate_response_is_created_from_factory_defaults():
     assert response.metadata is not None
     assert response.metadata.token_metadata is not None
     assert response.metadata.cost_metadata is not None
-    assert (
-        response.metadata.token_metadata.num_tokens_input
-        == EstimateResponseFactory.DEFAULT_NUM_TOKENS_INPUT
-    )
-    assert (
-        response.metadata.cost_metadata.total_token_cost
-        == EstimateResponseFactory.DEFAULT_TOTAL_TOKEN_COST
-    )
+    assert response.metadata.token_metadata.num_tokens_input == EstimateResponseFactory.DEFAULT_NUM_TOKENS_INPUT
+    assert response.metadata.cost_metadata.total_token_cost == EstimateResponseFactory.DEFAULT_TOTAL_TOKEN_COST
 
 
 def test_estimate_response_is_created_with_custom_values():

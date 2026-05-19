@@ -124,6 +124,7 @@ def process_transcription(transcription: str) -> None:
 
     append_message("assistant", estimation, caption)
 
+
 # Function to configure the Streamlit page layout and settings
 def configure_page():
     st.set_page_config(
@@ -138,6 +139,7 @@ def configure_page():
 
     return st.empty()
 
+
 # Function to display and handle sidebar interactions
 def handle_sidebar():
     with st.sidebar:
@@ -150,6 +152,7 @@ def handle_sidebar():
             return PREDEFINED_PROMPT_TEXT
 
     return None
+
 
 # =====================
 # Load environment

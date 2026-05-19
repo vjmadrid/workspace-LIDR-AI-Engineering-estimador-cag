@@ -52,11 +52,11 @@ class Settings(BaseSettings):
     # OpenAI Settings
     OPENAI_MODEL: str
     OPENAI_API_KEY: str = ""
-    
+
     # Anthropic Settings
     ANTHROPIC_MODEL: str
     ANTHROPIC_API_KEY: str = ""
-    
+
     # LiteLLM Settings
     LLMLITE_MODEL: str = "gpt-4o-mini"
 

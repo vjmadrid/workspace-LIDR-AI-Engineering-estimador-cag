@@ -18,9 +18,7 @@ if __name__ == "__main__":
     # Estimate
     print("\nEnviando transcripción a LLM ...\n")
 
-    estimation = estimateOpenAIService.estimate_from_transcript(
-        transcript=MESSAGE, model="gpt-4o-mini"
-    )
+    estimation = estimateOpenAIService.estimate_from_transcript(transcript=MESSAGE, model="gpt-4o-mini")
 
     print("\n=== ESTIMACIÓN GENERADA ===\n")
     print(estimation.response)
