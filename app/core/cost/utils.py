@@ -7,6 +7,7 @@ class OpenAICostUtil:
     PRICING = {
         "gpt-4o-mini": {"input": 0.15, "output": 0.60},
         "gpt-4o-mini-2024-07-18": {"input": 0.15, "output": 0.60},
+        "gpt-4o": {"input": 2.50, "output": 10.00},
         "gpt-5.4-mini": {"input": 0.75, "output": 4.50},
         "gpt-5.4": {"input": 2.50, "output": 15.00},
         "gpt-5.4-nano": {"input": 0.20, "output": 1.25},
@@ -46,6 +47,7 @@ class AnthropicCostUtil:
         "claude-sonnet-4-0": {"input": 3.00, "output": 15.00},
         "claude-sonnet-4-20250514": {"input": 3.00, "output": 15.00},
         "claude-haiku-4-5-20251001": {"input": 1.00, "output": 5.00},
+        "claude-sonnet-4-5": {"input": 3.00, "output": 15.00},
         "claude-sonnet-4-6-20250514": {"input": 3.00, "output": 15.00},
         "claude-3-7-sonnet-latest": {"input": 3.00, "output": 15.00},
         "claude-3-7-sonnet-20250219": {"input": 3.00, "output": 15.00},
@@ -77,3 +79,55 @@ class AnthropicCostUtil:
         )
 
         return response_dto
+
+
+def normalise_litellm_model_name(model: str) -> str:
+    """Strip provider prefixes like ``anthropic/`` that LiteLLM may emit."""
+    return model.split("/", 1)[1] if "/" in model else model
+
+
+def provider_from_litellm_model(model: str) -> str:
+    name = normalise_litellm_model_name(model).lower()
+    if name.startswith("claude"):
+        return "anthropic"
+    if name.startswith("gpt") or name.startswith("o1") or name.startswith("o3"):
+        return "openai"
+    return "unknown"
+
+
+class LLMWrapperCostUtil:
+    """Cost utility for LiteLLM wrapper responses across supported providers."""
+
+    @staticmethod
+    def calculate_cost(model: str, input_tokens=0, output_tokens=0):
+        normalised_model = normalise_litellm_model_name(model)
+        provider = provider_from_litellm_model(normalised_model)
+
+        if provider == "openai":
+            return OpenAICostUtil.calculate_cost(
+                model=normalised_model,
+                input_tokens=input_tokens,
+                output_tokens=output_tokens,
+            )
+        if provider == "anthropic":
+            return AnthropicCostUtil.calculate_cost(
+                model=normalised_model,
+                input_tokens=input_tokens,
+                output_tokens=output_tokens,
+            )
+
+        return TokenCostResponseDTO(
+            llm_model=normalised_model,
+            input_token_cost=0,
+            output_token_cost=0,
+            total_token_cost=0,
+        )
+
+    @staticmethod
+    def calculate_total_cost(model: str, input_tokens=0, output_tokens=0) -> float:
+        token_costs = LLMWrapperCostUtil.calculate_cost(
+            model=model,
+            input_tokens=input_tokens,
+            output_tokens=output_tokens,
+        )
+        return round(token_costs.total_token_cost, 6)

@@ -25,40 +25,32 @@ import litellm
 import structlog
 from litellm import Router
 
+from app.core.cost.utils import (
+    LLMWrapperCostUtil,
+    normalise_litellm_model_name,
+    provider_from_litellm_model,
+)
 from app.services.cache.cache_services import EstimationCache
 
 # Logging Configuration
 log = structlog.get_logger()
 
 
-# Cost per 1M tokens (USD). Update as pricing changes.
-MODEL_COSTS: dict[str, dict[str, float]] = {
-    "gpt-4o-mini": {"input": 0.15, "output": 0.60},
-    "gpt-4o": {"input": 2.50, "output": 10.00},
-    "claude-haiku-4-5": {"input": 1.00, "output": 5.00},
-    "claude-haiku-4-5-20251001": {"input": 1.00, "output": 5.00},
-    "claude-sonnet-4-5": {"input": 3.00, "output": 15.00},
-}
-
-
 def _estimate_cost(model: str, tokens_in: int, tokens_out: int) -> float:
-    base = _normalise_model_name(model)
-    costs = MODEL_COSTS.get(base) or MODEL_COSTS.get(model) or {"input": 0.0, "output": 0.0}
-    return round((tokens_in * costs["input"] + tokens_out * costs["output"]) / 1_000_000, 6)
+    return LLMWrapperCostUtil.calculate_total_cost(
+        model=model,
+        input_tokens=tokens_in,
+        output_tokens=tokens_out,
+    )
 
 
 def _normalise_model_name(model: str) -> str:
     """Strip provider prefixes like ``anthropic/`` that LiteLLM may emit."""
-    return model.split("/", 1)[1] if "/" in model else model
+    return normalise_litellm_model_name(model)
 
 
 def _provider_from_model(model: str) -> str:
-    name = _normalise_model_name(model).lower()
-    if name.startswith("claude"):
-        return "anthropic"
-    if name.startswith("gpt") or name.startswith("o1") or name.startswith("o3"):
-        return "openai"
-    return "unknown"
+    return provider_from_litellm_model(model)
 
 
 class LLMWrapper:
