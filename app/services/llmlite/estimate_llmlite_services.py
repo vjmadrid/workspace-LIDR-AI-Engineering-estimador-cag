@@ -5,10 +5,10 @@ from typing import Any
 from app.config import LLMProvider, get_settings
 from app.constants.estimate_constants import LLMLITE_MODEL_DEFAULT
 from app.core.cost.dtos import TokenCostResponseDTO
-from app.core.cost.utils import OpenAICostUtil
+from app.core.cost.utils import LLMWrapperCostUtil
 from app.dtos.estimate_dtos import EstimateResponseDTO
 from app.exceptions.estimate_exceptions import EstimateServiceException
-from app.prompts.builders.estimate_openai_prompt_builder import EstimateOpenAIPromptBuilder
+from app.prompts.builders.estimate_prompt_builder import EstimatePromptBuilder
 
 logger = logging.getLogger(__name__)
 
@@ -17,12 +17,12 @@ class EstimateLLMLiteService:
     def __init__(
         self,
         completion: Callable[..., Any] | None = None,
-        prompt_builder: EstimateOpenAIPromptBuilder | None = None,
+        prompt_builder: EstimatePromptBuilder | None = None,
         settings=None,
     ):
         self._completion = completion
         self._settings = settings or get_settings()
-        self._prompt_builder = prompt_builder or EstimateOpenAIPromptBuilder()
+        self._prompt_builder = prompt_builder or EstimatePromptBuilder()
 
     @property
     def completion(self) -> Callable[..., Any]:
@@ -54,7 +54,7 @@ class EstimateLLMLiteService:
 
         usage = self._get_usage(response)
         if usage is None:
-            raise EstimateServiceException("The LLM response did not include token usage metadata")
+            logger.warning("LiteLLM response did not include token usage metadata for model=%s", model)
 
         response_content = self._get_response_content(response)
         if not response_content:
@@ -115,16 +115,8 @@ class EstimateLLMLiteService:
 
     @staticmethod
     def _calculate_cost(model: str, input_tokens: int, output_tokens: int) -> TokenCostResponseDTO:
-        try:
-            return OpenAICostUtil.calculate_cost(
-                model=model,
-                input_tokens=input_tokens,
-                output_tokens=output_tokens,
-            )
-        except ValueError:
-            return TokenCostResponseDTO(
-                llm_model=model,
-                input_token_cost=0,
-                output_token_cost=0,
-                total_token_cost=0,
-            )
+        return LLMWrapperCostUtil.calculate_cost(
+            model=model,
+            input_tokens=input_tokens,
+            output_tokens=output_tokens,
+        )

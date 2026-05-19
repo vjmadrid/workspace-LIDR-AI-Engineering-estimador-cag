@@ -1,4 +1,5 @@
 from app.prompts.builders.estimate_openai_prompt_builder import EstimateOpenAIPromptBuilder
+from app.prompts.builders.estimate_prompt_builder import EstimatePromptBuilder
 
 
 def test_estimate_prompt_builder_is_created_with_custom_values():
@@ -16,6 +17,26 @@ def test_estimate_prompt_builder_is_created_with_custom_values():
 
     assert builder.system_prompt == "Eres un estimador tecnico."
     assert builder.examples == examples
+
+
+def test_provider_neutral_prompt_builder_uses_same_message_contract():
+    builder = EstimatePromptBuilder(
+        system_prompt="System prompt de prueba.",
+        examples=[],
+    )
+
+    messages = builder.build_messages("Crear una API de estimaciones.")
+
+    assert messages == [
+        {
+            "role": "system",
+            "content": "System prompt de prueba.",
+        },
+        {
+            "role": "user",
+            "content": "Resumen de reunión: Crear una API de estimaciones.",
+        },
+    ]
 
 
 def test_build_messages_starts_with_system_prompt():

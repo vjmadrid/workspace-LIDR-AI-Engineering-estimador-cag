@@ -98,6 +98,24 @@ def test_estimate_from_transcript_uses_model_from_settings_by_default():
     )
 
 
+def test_estimate_from_transcript_calculates_cost_for_anthropic_model():
+    completion = Mock(return_value=build_llmlite_response())
+    prompt_builder = Mock()
+    prompt_builder.build_messages.return_value = [{"role": "user", "content": "texto"}]
+    service = build_service(
+        completion=completion,
+        prompt_builder=prompt_builder,
+        settings=SimpleNamespace(LLMLITE_MODEL="anthropic/claude-haiku-4-5-20251001"),
+    )
+
+    response = service.estimate_from_transcript("texto")
+
+    assert response.llm_model == "anthropic/claude-haiku-4-5-20251001"
+    assert response.input_token_cost == pytest.approx(0.0001)
+    assert response.output_token_cost == pytest.approx(0.00025)
+    assert response.total_token_cost == pytest.approx(0.00035)
+
+
 def test_estimate_from_transcript_wraps_completion_errors():
     completion = Mock(side_effect=RuntimeError("litellm unavailable"))
     prompt_builder = Mock()
@@ -111,18 +129,20 @@ def test_estimate_from_transcript_wraps_completion_errors():
         service.estimate_from_transcript("texto")
 
 
-def test_estimate_from_transcript_raises_when_usage_is_missing():
+def test_estimate_from_transcript_returns_zero_token_metadata_when_usage_is_missing():
     completion = Mock(return_value=build_llmlite_response())
     completion.return_value.usage = None
     prompt_builder = Mock()
     prompt_builder.build_messages.return_value = [{"role": "user", "content": "texto"}]
     service = build_service(completion=completion, prompt_builder=prompt_builder)
 
-    with pytest.raises(
-        EstimateServiceException,
-        match="The LLM response did not include token usage metadata",
-    ):
-        service.estimate_from_transcript("texto")
+    response = service.estimate_from_transcript("texto")
+
+    assert response.response == "Estimacion generada con LiteLLM."
+    assert response.num_tokens_input == 0
+    assert response.num_tokens_response == 0
+    assert response.num_tokens_total == 0
+    assert response.total_token_cost == 0
 
 
 @pytest.mark.parametrize("content", ["", None])
