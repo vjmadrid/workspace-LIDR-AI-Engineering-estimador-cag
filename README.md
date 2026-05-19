@@ -95,6 +95,11 @@ N/A
   * [Repositorio](https://github.com/BerriAI/litellm)
   * [Documentacion](https://docs.litellm.ai/)
   * [Web](https://www.litellm.ai/)
+* **httpx** : Cliente HTTP para Python, utilizado para realizar solicitudes HTTP de manera eficiente.
+  * [Pypi](https://pypi.org/project/httpx/)
+  * [Repositorio](https://github.com/encode/httpx)
+  * [Documentacion](https://www.python-httpx.org/)
+  * [Web](https://www.python-httpx.org/)
 
 
 **Testing / QA**
@@ -169,6 +174,7 @@ uv add pipdeptree
 uv add tiktoken
 uv add streamlit
 uv add litellm
+uv add httpx
 
 # Desarrollo
 uv add --dev ruff

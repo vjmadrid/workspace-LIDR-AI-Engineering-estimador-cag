@@ -7,6 +7,7 @@ requires-python = ">=3.11"
 dependencies = [
     "anthropic>=0.97.0",
     "fastapi>=0.136.1",
+    "httpx>=0.28.1",
     "litellm>=1.83.0",
     "openai>=2.32.0",
     "pipdeptree>=2.35.1",
