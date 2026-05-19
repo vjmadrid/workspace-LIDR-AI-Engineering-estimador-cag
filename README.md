@@ -105,7 +105,11 @@ N/A
   * [Repositorio](https://github.com/redis/redis-py)
   * [Documentacion](https://redis-py.readthedocs.io/en/stable/)
   * [Web](https://github.com/redis/redis-py)
-
+* **jinja2** : Motor de plantillas para Python, utilizado para generar texto dinámico a partir de plantillas.
+  * [Pypi](https://pypi.org/project/Jinja2/)
+  * [Repositorio](https://github.com/pallets/jinja/)
+  * [Documentacion](https://jinja.palletsprojects.com/en/stable/)
+  * [Web](https://jinja.palletsprojects.com/en/stable/)
 
 
 **Testing / QA**
@@ -182,6 +186,7 @@ uv add streamlit
 uv add litellm
 uv add httpx
 uv add redis
+uv add jinja2
 
 # Desarrollo
 uv add --dev ruff
