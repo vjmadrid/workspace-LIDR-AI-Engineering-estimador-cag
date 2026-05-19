@@ -7,7 +7,11 @@ HEALTH_ENDPOINT = f"{manager_constants.ROOT_ENDPOINT}{manager_constants.HEALTH_E
 
 def test_health_returns_200(client: TestClient) -> None:
     response = client.get(HEALTH_ENDPOINT)
-    data = response.json()
 
     assert response.status_code == 200
-    assert data["status"] == "healthy"
+    assert response.json() == {
+        "success": True,
+        "status": "healthy",
+        "version": "0.1.0",
+        "environment": "development",
+    }
