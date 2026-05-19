@@ -27,6 +27,7 @@ class EstimateLLMLiteService:
     @property
     def completion(self) -> Callable[..., Any]:
         if self._completion is None:
+            # Import LiteLLM lazily so tests can inject a fake completion function without loading the provider client.
             from litellm import completion
 
             self._completion = completion
@@ -54,6 +55,7 @@ class EstimateLLMLiteService:
 
         usage = self._get_usage(response)
         if usage is None:
+            # Some LiteLLM providers may omit usage metadata; keep the estimation and report zero token/cost data.
             logger.warning("LiteLLM response did not include token usage metadata for model=%s", model)
 
         response_content = self._get_response_content(response)
@@ -109,12 +111,14 @@ class EstimateLLMLiteService:
 
     @staticmethod
     def _get_value(source, key: str, default=None):
+        # LiteLLM responses and tests may use either dicts or attribute-based objects.
         if isinstance(source, dict):
             return source.get(key, default)
         return getattr(source, key, default)
 
     @staticmethod
     def _calculate_cost(model: str, input_tokens: int, output_tokens: int) -> TokenCostResponseDTO:
+        # Use the provider-aware cost utility because LiteLLM can route to OpenAI, Anthropic, or custom models.
         return LLMWrapperCostUtil.calculate_cost(
             model=model,
             input_tokens=input_tokens,
