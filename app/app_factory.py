@@ -1,9 +1,8 @@
-import logging
-
+import structlog
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.config import get_settings
+from app.config import Settings, get_settings
 from app.routers.manager_routes import router as manager_router
 from app.routers.estimate_routes import router as estimation_router
 from app.routers.estimate_openai_routes import router as estimation_openai_router
@@ -11,19 +10,55 @@ from app.routers.estimate_anthropic_routes import router as estimation_anthropic
 from app.routers.estimate_llmlite import router as estimation_llmlite_router
 
 
-logger = logging.getLogger(__name__)
+def log_settings_environment_variables(settings: Settings, log) -> None:
+    """Log every setting loaded from the environment configuration."""
+    log.info("- Application settings loaded")
 
+    sensitive_keywords = ("API_KEY", "PASSWORD", "SECRET", "TOKEN")
+    for key, value in settings.model_dump(mode="json").items():
+        if any(keyword in key.upper() for keyword in sensitive_keywords) and value:
+            value = "***"
+        log.info("setting_loaded", setting=key, value=value)
+
+def configure_logging() -> None:
+    """Set up structlog: JSON in production, human-readable in development."""
+    settings = get_settings()
+
+    if settings.APP_ENV == "production":
+        renderer = structlog.processors.JSONRenderer()
+    else:
+        renderer = structlog.dev.ConsoleRenderer()
+
+    structlog.configure(
+        processors=[
+            structlog.contextvars.merge_contextvars,
+            structlog.stdlib.add_log_level,
+            structlog.processors.TimeStamper(fmt="iso"),
+            structlog.processors.StackInfoRenderer(),
+            structlog.processors.format_exc_info,
+            renderer,
+        ],
+        wrapper_class=structlog.stdlib.BoundLogger,
+        context_class=dict,
+        logger_factory=structlog.PrintLoggerFactory(),
+        cache_logger_on_first_use=True,
+    )
 
 def create_app() -> FastAPI:
     """
     Factory function to create and configure the FastAPI application
     This allows for better modularity and testing
     """
-    logger.info("Starting the FastAPI server ...")
+    configure_logging()
+    log = structlog.get_logger()
+
+    settings = get_settings()
+
+
+    log.info("Starting the FastAPI server ...")
 
     # Load settings
-    logger.info("- Loading application settings")
-    settings = get_settings()
+    log.info("- Loading application settings")
 
     # Application instance
     app = FastAPI(
@@ -32,16 +67,12 @@ def create_app() -> FastAPI:
         description="API para generar estimaciones de proyectos de software basadas en resúmenes de reuniones.",
     )
 
-    # Log important configuration values
-    logger.info("- Application settings loaded")
-    logger.info("APP_ENV: %s", settings.APP_ENV.value)
-    logger.info("LLM_PROVIDER: %s", settings.LLM_PROVIDER.value)
-    logger.info("OpenAI Model: %s", settings.OPENAI_MODEL)
-    logger.info("Anthropic Model: %s", settings.ANTHROPIC_MODEL)
-    logger.info("LiteLLM Model: %s", settings.LLMLITE_MODEL)
+    # Log loaded configuration values
+    log_settings_environment_variables(settings, log)
+
 
     # Add CORS Support
-    logger.info("- Adding CORS middleware")
+    log.info("- Adding CORS middleware")
     app.add_middleware(
         CORSMiddleware,
         allow_origins=["*"],
@@ -51,7 +82,7 @@ def create_app() -> FastAPI:
     )
 
     # Add API routers
-    logger.info("- Adding API routers")
+    log.info("- Adding API routers")
     app.include_router(manager_router)
     app.include_router(estimation_router)
     app.include_router(estimation_openai_router)
