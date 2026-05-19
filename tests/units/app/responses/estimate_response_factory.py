@@ -1,4 +1,5 @@
 from app.dtos.estimate_dtos import EstimateResponseDTO
+from app.responses.estimate_llmwrapper_responses import EstimationLLMWrapperResponse
 from app.responses.estimate_responses import EstimateResponse
 
 
@@ -57,6 +58,24 @@ class EstimateResponseDTOFactory:
             "input_token_cost": EstimateResponseFactory.DEFAULT_INPUT_TOKEN_COST,
             "output_token_cost": EstimateResponseFactory.DEFAULT_OUTPUT_TOKEN_COST,
             "total_token_cost": EstimateResponseFactory.DEFAULT_TOTAL_TOKEN_COST,
+        }
+        payload.update(overrides)
+        return payload
+
+
+class EstimateLLMWrapperResponseFactory:
+    DEFAULT_TEXT = "La funcionalidad se estima en 8 horas."
+    DEFAULT_PROMPT_VERSION = "v1"
+
+    @classmethod
+    def build(cls, **overrides) -> EstimationLLMWrapperResponse:
+        return EstimationLLMWrapperResponse(**cls.build_payload(**overrides))
+
+    @classmethod
+    def build_payload(cls, **overrides) -> dict:
+        payload = {
+            "text": cls.DEFAULT_TEXT,
+            "prompt_version": cls.DEFAULT_PROMPT_VERSION,
         }
         payload.update(overrides)
         return payload
