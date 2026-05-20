@@ -1,4 +1,6 @@
 import structlog
+from collections.abc import Iterator
+from typing import Any
 
 from anthropic import Anthropic
 
@@ -60,6 +62,7 @@ class EstimateAnthropicService:
         if not response_content:
             raise EstimateServiceException("The LLM response content is empty")
 
+        # Show token usage details in logs for debugging and transparency
         log.debug("Input tokens used: %s", response.usage.input_tokens)
         log.debug("Output tokens used: %s", response.usage.output_tokens)
         log.debug(
@@ -84,6 +87,70 @@ class EstimateAnthropicService:
             output_token_cost=token_costs.output_token_cost,
             total_token_cost=token_costs.total_token_cost,
         )
+
+    def stream_estimate_from_transcript(
+        self,
+        transcript: str,
+        model: str = ANTHROPIC_MODEL_DEFAULT,
+        max_tokens: int = ANTHROPIC_MAX_TOKENS_DEFAULT,
+    ) -> Iterator[dict[str, Any]]:
+        log.info("Streaming transcript estimation with Anthropic model=%s", model)
+
+        messages = self._prompt_builder.build_messages(transcript)
+        system_prompt, anthropic_messages = self._to_anthropic_messages(messages)
+
+        try:
+            stream_manager = self.client.messages.stream(
+                model=model,
+                max_tokens=max_tokens,
+                system=system_prompt,
+                messages=anthropic_messages,
+                temperature=0.2,
+            )
+        except Exception as exc:
+            log.exception("Error while starting streaming estimation with Anthropic")
+            raise EstimateServiceException("An error occurred while generating the estimation") from exc
+
+        try:
+            with stream_manager as stream:
+                response_parts: list[str] = []
+                for text in stream.text_stream:
+                    if text:
+                        response_parts.append(text)
+                        yield {"type": "delta", "content": text}
+
+                final_message = stream.get_final_message()
+        except Exception as exc:
+            log.exception("Error while streaming estimation with Anthropic")
+            raise EstimateServiceException("An error occurred while generating the estimation") from exc
+
+        response_content = "".join(response_parts).strip()
+        if not response_content:
+            raise EstimateServiceException("The LLM response content is empty")
+
+        usage = getattr(final_message, "usage", None)
+        if usage is None:
+            raise EstimateServiceException("The LLM response did not include token usage metadata")
+
+        input_tokens = usage.input_tokens
+        output_tokens = usage.output_tokens
+        token_costs = AnthropicCostUtil.calculate_cost(
+            model=model,
+            input_tokens=input_tokens,
+            output_tokens=output_tokens,
+        )
+
+        yield {
+            "type": "metadata",
+            "provider": LLMProvider.ANTHROPIC.value,
+            "llm_model": model,
+            "num_tokens_input": input_tokens,
+            "num_tokens_response": output_tokens,
+            "num_tokens_total": input_tokens + output_tokens,
+            "input_token_cost": token_costs.input_token_cost,
+            "output_token_cost": token_costs.output_token_cost,
+            "total_token_cost": token_costs.total_token_cost,
+        }
 
     @staticmethod
     def _to_anthropic_messages(

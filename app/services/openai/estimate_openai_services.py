@@ -65,6 +65,7 @@ class EstimateOpenAIService:
 
         estimate_response_dto = generate_openai_estimate_response_dto(LLMProvider.OPENAI, model, response)
 
+        # Show token usage details in logs for debugging and transparency
         log.debug("Input tokens used: %s", response.usage.prompt_tokens)
         log.debug("Output tokens used: %s", response.usage.completion_tokens)
         log.debug("Total tokens used: %s", response.usage.total_tokens)
