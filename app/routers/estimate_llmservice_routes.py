@@ -29,6 +29,8 @@ router = APIRouter(prefix="/api/v1", tags=["estimations"])
 @router.post(ESTIMATE_LLMSERVICE_ENDPOINT, response_model=EstimationLLMServiceResponse)
 async def create_estimation(request: EstimationLLMServiceRequest) -> EstimationLLMServiceResponse:
     """Receive a meeting transcription and return a software project estimation."""
+    log.info("Estimate LLMService endpoint called")
+
     opts = GenerationOptions(
         preprocessing=request.preprocessing,
         example_format=request.example_format,
@@ -66,6 +68,7 @@ async def create_estimation_stream(
     benefit of streaming (intermediate phase 1 tokens would leak; validation
     only makes sense over the complete text).
     """
+    log.info("Estimate LLMService endpoint called")
     system_prompt = build_system_prompt()
 
     async def event_generator() -> AsyncIterator[dict]:

@@ -74,7 +74,7 @@ DOCKER_COMPOSE_FILE := docker-compose.yml
 # =====================
 
 help: ## Show help message
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'
+	@grep -h -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-24s\033[0m %s\n", $$1, $$2}'
 
 # =====================
 # Clean
@@ -145,11 +145,14 @@ run-uvicorn: ## Run Application with Uvicorn
 run-streamlit: ## Run Streamlit application
 	$(UV) run streamlit run front/streamlit/main_streamlit_openai.py --server.port $(STREAMLIT_PORT)
 
-run-streamlit-2: ## Run Streamlit application
+run-streamlit-2: ## Run Streamlit application 2
 	$(UV) run streamlit run front/streamlit/main_streamlit_openai_2.py --server.port $(STREAMLIT_PORT)
 
-run-streamlit-3: ## Run Streamlit application
+run-streamlit-3: ## Run Streamlit application 3
 	$(UV) run streamlit run front/streamlit/main_streamlit_openai_3.py --server.port $(STREAMLIT_PORT)
+
+run-streamlit-client: ## Run Streamlit application
+	$(UV) run streamlit run front/streamlit/main_streamlit_client_http.py --server.port $(STREAMLIT_PORT)
 
 
 # =====================
