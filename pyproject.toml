@@ -16,6 +16,7 @@ dependencies = [
     "pydantic-settings>=2.14.0",
     "python-dotenv>=1.2.2",
     "redis>=7.4.0",
+    "sse-starlette>=3.4.4",
     "streamlit>=1.57.0",
     "structlog>=25.5.0",
     "tiktoken>=0.12.0",

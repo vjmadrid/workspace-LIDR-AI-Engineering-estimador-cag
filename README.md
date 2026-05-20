@@ -116,6 +116,12 @@ N/A
   * [Repositorio](https://github.com/hynek/structlog)
   * [Documentacion](https://www.structlog.org/en/stable/)
   * [Web](https://www.structlog.org/en/stable/)
+* **sse-starlette** : Biblioteca para manejar Server-Sent Events (SSE) en aplicaciones construidas con Starlette o FastAPI.
+  * [Pypi](https://pypi.org/project/sse-starlette/)
+  * [Repositorio](https://github.com/sysid/sse-starlette)
+  * [Documentacion](https://github.com/sysid/sse-starlette)
+  * [Web](https://github.com/sysid/sse-starlette)
+
 
 **Testing / QA**
 
@@ -205,6 +211,7 @@ uv add redis
 uv add jinja2
 uv add structlog
 uv add fakeredis
+uv add sse-starlette
 
 # Desarrollo
 uv add --dev ruff
