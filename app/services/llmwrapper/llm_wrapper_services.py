@@ -115,6 +115,8 @@ class LLMWrapper:
         plus ``cache_hit`` and ``cost_usd`` fields.
         """
         cache_key_model = model_override or self.primary_model
+
+        # Generate a cache key for this request.
         cache_key = EstimationCache.make_key(
             system_prompt=system_prompt,
             user_message=user_message,
@@ -122,14 +124,18 @@ class LLMWrapper:
             max_tokens=max_tokens,
             thinking_budget=thinking_budget,
         )
+
+        # Check cache before calling the LLM. Cache keys include all generation parameters
         cached = self.cache.get(cache_key)
         if cached:
             return {**cached, "cache_hit": True}
 
+        # Prepare the messages and kwargs for the LLM call. The cache key includes all these parameters
         messages = [
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_message},
         ]
+
         kwargs = self._build_call_kwargs(
             messages=messages,
             max_tokens=max_tokens,
@@ -143,6 +149,7 @@ class LLMWrapper:
             model=model_override or self.primary_model,
             has_thinking=thinking_budget is not None,
         )
+
         t0 = time.perf_counter()
         try:
             response = self._dispatch(model_override=model_override, **kwargs)
@@ -204,6 +211,7 @@ class LLMWrapper:
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_message},
         ]
+
         kwargs = self._build_call_kwargs(
             messages=messages,
             max_tokens=max_tokens,
@@ -265,15 +273,21 @@ class LLMWrapper:
         model_override: str | None,
         stream: bool = False,
     ) -> dict[str, Any]:
+
         kwargs: dict[str, Any] = {
             "messages": messages,
             "max_tokens": max_tokens,
         }
+
+        # Check is streaming is requested and set the appropriate flag.
+        # Streaming calls bypass the Router and go directly to the primary model, so we don't need to worry about fallback in this case.
         if stream:
             kwargs["stream"] = True
 
+        # Check if thinking budget is requested and the target model supports it. If so, add the appropriate parameters to the call kwargs.
         if thinking_budget is not None:
             target_model = model_override or self.primary_model
+
             if _provider_from_model(target_model) == "anthropic":
                 kwargs["thinking"] = {"type": "enabled", "budget_tokens": thinking_budget}
                 kwargs["max_tokens"] = max(max_tokens, thinking_budget + 1024)
@@ -283,6 +297,7 @@ class LLMWrapper:
                     provider=_provider_from_model(target_model),
                     model=target_model,
                 )
+
         return kwargs
 
     def _dispatch(self, *, model_override: str | None, **kwargs: Any) -> Any:

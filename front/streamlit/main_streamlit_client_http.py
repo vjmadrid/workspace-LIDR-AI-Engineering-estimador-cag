@@ -19,7 +19,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 API_BASE_URL = os.getenv("ESTIMATOR_API_BASE_URL", "http://localhost:8000")
-STREAM_ENDPOINT = f"{API_BASE_URL.rstrip('/')}/api/v1/estimate/stream"
+STREAM_ENDPOINT = f"{API_BASE_URL.rstrip('/')}/api/v1/estimate/llmservice/stream"
 
 st.set_page_config(page_title="Software Estimator", page_icon="📊")
 st.title("Software Estimator")

@@ -215,6 +215,7 @@ def generate_estimation(
         extracted_requirements, prep_usage, prep_cost = extract_requirements(transcription, opts)
         user_input = extracted_requirements
 
+    # Prepare the system prompt with the appropriate knobs (examples, formatting, etc).
     system_prompt = build_system_prompt(
         example_format=opts.example_format,
         num_examples=opts.num_examples,

@@ -67,7 +67,7 @@ PYTEST_PARAMETER := -ra -vv $(PYTEST_PARAMETER_DEBUG)
 # Docker Configuration
 # =====================
 
-DOCKER_COMPOSE_FILE := docker-compose.yml
+DOCKER_COMPOSE_FILE := docker-compose-2.yml
 
 # =====================
 # Help
