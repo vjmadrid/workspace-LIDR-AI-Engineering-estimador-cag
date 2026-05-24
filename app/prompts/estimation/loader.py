@@ -42,7 +42,11 @@ def render_estimation_prompt(
         "output_format": request.output_format.value,
     }
 
-    system = _env.get_template(f"{version}/system.j2").render(**context)
+    # System base version
+    #system = _env.get_template(f"{version}/system.j2").render(**context)
+
+    # System advance version
+    system = _env.get_template(f"{version}/systemadv.j2").render(**context)
     user = _env.get_template(f"{version}/user.j2").render(**context)
 
     return system, user

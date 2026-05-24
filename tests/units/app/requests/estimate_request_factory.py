@@ -1,10 +1,13 @@
-from app.requests.estimate_requests import EstimateRequest
+from app.requests.estimate_llmwrapper_advanced_requests import (
+    EstimateLLMWrapperAdvancedRequest,
+)
 from app.requests.estimate_llmwrapper_requests import (
     DetailLevel,
     EstimateLLMWrapperRequest,
     OutputFormat,
     ProjectType,
 )
+from app.requests.estimate_requests import EstimateRequest
 
 
 class EstimateRequestFactory:
@@ -41,5 +44,19 @@ class EstimateLLMWrapperRequestFactory:
             "detail_level": DetailLevel.MEDIUM,
             "output_format": OutputFormat.PHASES_TABLE,
         }
+        payload.update(overrides)
+        return payload
+
+
+class EstimateLLMWrapperAdvancedRequestFactory:
+    DEFAULT_DESCRIPTION = EstimateLLMWrapperRequestFactory.DEFAULT_DESCRIPTION
+
+    @classmethod
+    def build(cls, **overrides) -> EstimateLLMWrapperAdvancedRequest:
+        return EstimateLLMWrapperAdvancedRequest(**cls.build_payload(**overrides))
+
+    @classmethod
+    def build_payload(cls, **overrides) -> dict:
+        payload = EstimateLLMWrapperRequestFactory.build_payload()
         payload.update(overrides)
         return payload

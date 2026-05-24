@@ -121,7 +121,16 @@ N/A
   * [Repositorio](https://github.com/sysid/sse-starlette)
   * [Documentacion](https://github.com/sysid/sse-starlette)
   * [Web](https://github.com/sysid/sse-starlette)
-
+* **instructor** : Biblioteca para generar embeddings de texto utilizando modelos de lenguaje. Salidas estructuradas para LLMs
+  * [Pypi](https://pypi.org/project/instructor/)
+  * [Repositorio](https://github.com/567-labs/instructor)
+  * [Documentacion](https://python.useinstructor.com/)
+  * [Web](https://python.useinstructor.com/)
+* **redisvl** : Cliente de Redis Vector Database para Python, utilizado para interactuar con bases de datos Redis que almacenan vectores.
+  * [Pypi](https://pypi.org/project/redisvl/)
+  * [Repositorio](https://github.com/redis/redis-vl-python)
+  * [Documentacion](https://docs.redisvl.com/en/latest/)
+  * [Web](https://github.com/redis/redis-vl-python)
 
 **Testing / QA**
 
@@ -212,6 +221,8 @@ uv add jinja2
 uv add structlog
 uv add fakeredis
 uv add sse-starlette
+uv add instructor
+uv add redisvl
 
 # Desarrollo
 uv add --dev ruff

@@ -5,11 +5,11 @@ from app.schemas.estimation import (
     ProjectType,
 )
 
-EstimateLLMWrapperRequest = EstimationRequest
+EstimateLLMWrapperAdvancedRequest = EstimationRequest
 
 __all__ = [
     "DetailLevel",
-    "EstimateLLMWrapperRequest",
+    "EstimateLLMWrapperAdvancedRequest",
     "OutputFormat",
     "ProjectType",
 ]
