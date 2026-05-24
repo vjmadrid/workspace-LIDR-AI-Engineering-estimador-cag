@@ -3,8 +3,8 @@ import pathlib
 from enum import StrEnum
 from functools import lru_cache
 
-from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import model_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class AppEnvironment(StrEnum):
@@ -35,7 +35,7 @@ class Settings(BaseSettings):
         env_file=".env",
         env_file_encoding="utf-8",
         case_sensitive=False,
-        extra="ignore"
+        extra="ignore",
     )
 
     BASE_DIR: pathlib.Path = pathlib.Path(__file__).parent.parent
@@ -76,22 +76,13 @@ class Settings(BaseSettings):
     ESTIMATE_BACKEND_BASE_URL: str
     ESTIMATE_BACKEND_TIMEOUT_SECONDS: float
 
-    #@model_validator(mode="after")
-    #def validate_api_key_for_provider(self) -> "Settings":
-    #    """Ensure the API key for the selected LLM provider is present."""
-    #    if self.LLM_PROVIDER == "openai" and not self.OPENAI_API_KEY:
-    #        raise ValueError("OPENAI_API_KEY is required when LLM_PROVIDER is 'openai'")
-    #    if self.LLM_PROVIDER == "anthropic" and not self.ANTHROPIC_API_KEY:
-    #        raise ValueError("ANTHROPIC_API_KEY is required when LLM_PROVIDER is 'anthropic'")
-    #     return self
-
     @model_validator(mode="after")
-    def validate_at_least_one_api_key(self) -> "Settings":
-        """LiteLLM may try either provider via fallback, so we require at least one key."""
-        if not self.OPENAI_API_KEY and not self.ANTHROPIC_API_KEY:
-            raise ValueError(
-                "At least one of OPENAI_API_KEY or ANTHROPIC_API_KEY must be set"
-            )
+    def validate_api_key_for_provider(self) -> "Settings":
+        """Ensure the selected direct provider has its API key configured."""
+        if self.LLM_PROVIDER == LLMProvider.OPENAI and not self.OPENAI_API_KEY:
+            raise ValueError("OPENAI_API_KEY is required when LLM_PROVIDER is 'openai'")
+        if self.LLM_PROVIDER == LLMProvider.ANTHROPIC and not self.ANTHROPIC_API_KEY:
+            raise ValueError("ANTHROPIC_API_KEY is required when LLM_PROVIDER is 'anthropic'")
         return self
 
     @property
