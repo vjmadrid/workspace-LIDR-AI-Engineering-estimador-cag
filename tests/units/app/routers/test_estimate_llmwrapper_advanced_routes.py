@@ -118,4 +118,10 @@ def test_unexpected_service_exception_returns_502(client: TestClient) -> None:
         clear_estimation_service_override()
 
     assert response.status_code == 502
-    assert response.json() == {"detail": "Upstream LLM call failed"}
+    assert response.json() == {
+        "detail": {
+            "message": "Upstream LLM call failed",
+            "error_type": "RuntimeError",
+            "error": "provider down",
+        }
+    }

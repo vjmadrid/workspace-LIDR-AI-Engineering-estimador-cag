@@ -1,3 +1,4 @@
+# Sesion 04
 from __future__ import annotations
 
 import json
@@ -13,7 +14,6 @@ from app.constants.estimate_constants import ESTIMATE_LLMWRAPPER_ENDPOINT, ESTIM
 from app.dependencies import get_llm_wrapper
 from app.prompts.estimation.loader import render_estimation_prompt
 from app.services.llmwrapper.llm_wrapper_services import LLMWrapper
-from app.exceptions.estimate_exceptions import EstimateServiceException
 from app.requests.estimate_llmwrapper_requests import EstimateLLMWrapperRequest
 from app.responses.estimate_llmwrapper_responses import EstimationLLMWrapperResponse
 from app.services.llmlite.estimate_llmlite_services import EstimateLLMLiteService

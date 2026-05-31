@@ -1,3 +1,4 @@
+# Sesion 04
 """Exact-match Redis cache for LLM responses.
 
 The cache key is a SHA-256 of the *full* system prompt plus the user message

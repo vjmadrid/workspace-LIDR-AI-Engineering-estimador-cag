@@ -1,3 +1,4 @@
+# Sesion 04
 """LiteLLM-backed wrapper that adds provider fallback, exact-match cache, cost tracking,
 and structured logging to every LLM call in the estimator.
 

@@ -58,9 +58,17 @@ def estimate_llmwrapper_advanced_endpoint(
             status_code=400, detail={"reason": exc.reason, "message": exc.message}
         ) from exc
     except Exception as exc:
+        error_message = str(exc)
         log.error(
             "estimation_endpoint_error",
-            error=str(exc)[:400],
+            error=error_message[:400],
             error_type=type(exc).__name__,
         )
-        raise HTTPException(status_code=502, detail="Upstream LLM call failed") from exc
+        raise HTTPException(
+            status_code=502,
+            detail={
+                "message": "Upstream LLM call failed",
+                "error_type": type(exc).__name__,
+                "error": error_message,
+            },
+        ) from exc

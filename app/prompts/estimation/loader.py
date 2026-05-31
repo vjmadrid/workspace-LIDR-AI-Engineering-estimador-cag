@@ -1,3 +1,4 @@
+# Sesion 04
 """Jinja2 loader for versioned prompt templates.
 
 The on-disk layout is ``app/prompts/<use_case>/<version>/<role>.j2``. Versioning
@@ -42,10 +43,28 @@ def render_estimation_prompt(
         "output_format": request.output_format.value,
     }
 
-    # System base version
-    #system = _env.get_template(f"{version}/system.j2").render(**context)
+    system = _env.get_template(f"{version}/system.j2").render(**context)
+    user = _env.get_template(f"{version}/user.j2").render(**context)
 
-    # System advance version
+    return system, user
+
+def render_estimation_prompt_adv(
+    request: EstimateLLMWrapperRequest,
+    version: str = "v1",
+) -> tuple[str, str]:
+    """Render the system and user prompts for the estimation use case.
+
+    Returns:
+        A tuple ``(system_prompt, user_prompt)`` ready to be sent to the LLM
+        as separate ``role: "system"`` and ``role: "user"`` messages.
+    """
+    context = {
+        "description": request.description,
+        "project_type": request.project_type.value,
+        "detail_level": request.detail_level.value,
+        "output_format": request.output_format.value,
+    }
+
     system = _env.get_template(f"{version}/systemadv.j2").render(**context)
     user = _env.get_template(f"{version}/user.j2").render(**context)
 

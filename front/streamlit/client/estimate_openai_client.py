@@ -8,8 +8,15 @@ from urllib.request import Request, urlopen
 
 from pydantic import ValidationError
 
-from app.constants.estimate_constants import ESTIMATE_OPENAI_ENDPOINT, ESTIMATE_OPENAI_STREAM_ENDPOINT
-from app.response.estimate_responses import EstimateResponse
+from app.constants.estimate_constants import (
+    ESTIMATE_LLMWRAPPER_ADVANCED_ENDPOINT,
+    ESTIMATE_OPENAI_ENDPOINT,
+    ESTIMATE_OPENAI_STREAM_ENDPOINT,
+)
+from app.responses.estimate_llmwrapper_advanced_responses import (
+    EstimationLLMWrapperAdvancedResponse,
+)
+from app.responses.estimate_responses import EstimateResponse
 
 API_V1_PREFIX = "api/v1"
 
@@ -65,6 +72,51 @@ class EstimateOpenAIBackendClient:
         except ValidationError as exc:
             raise EstimateBackendError("El backend devolvió una estimación con un formato inesperado.") from exc
 
+    def estimate_advanced(
+        self,
+        *,
+        description: str,
+        project_type: str,
+        detail_level: str,
+        output_format: str,
+    ) -> EstimationLLMWrapperAdvancedResponse:
+        request = Request(
+            url=self._estimate_advanced_url,
+            data=json.dumps(
+                {
+                    "description": description,
+                    "project_type": project_type,
+                    "detail_level": detail_level,
+                    "output_format": output_format,
+                }
+            ).encode("utf-8"),
+            headers={
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            },
+            method="POST",
+        )
+
+        try:
+            with urlopen(request, timeout=self.timeout_seconds) as response:
+                response_body = response.read()
+        except HTTPError as exc:
+            raise EstimateBackendError(_format_http_error(exc)) from exc
+        except TimeoutError as exc:
+            raise EstimateBackendError("El backend tardó demasiado en responder. Inténtalo de nuevo.") from exc
+        except URLError as exc:
+            raise EstimateBackendError("No se pudo conectar con el backend de estimaciones.") from exc
+
+        try:
+            payload = json.loads(response_body)
+        except json.JSONDecodeError as exc:
+            raise EstimateBackendError("El backend devolvió una respuesta que no se puede interpretar.") from exc
+
+        try:
+            return EstimationLLMWrapperAdvancedResponse.model_validate(payload)
+        except ValidationError as exc:
+            raise EstimateBackendError("El backend devolvió una estimación avanzada con un formato inesperado.") from exc
+
     def stream_estimate_from_transcript(self, transcription: str) -> Iterator[EstimateStreamEvent]:
         request = Request(
             url=self._estimate_stream_url,
@@ -107,6 +159,11 @@ class EstimateOpenAIBackendClient:
     @property
     def _estimate_stream_url(self) -> str:
         endpoint_path = f"{API_V1_PREFIX}/{ESTIMATE_OPENAI_STREAM_ENDPOINT.lstrip('/')}"
+        return urljoin(f"{self.base_url.rstrip('/')}/", endpoint_path)
+
+    @property
+    def _estimate_advanced_url(self) -> str:
+        endpoint_path = f"{API_V1_PREFIX}/{ESTIMATE_LLMWRAPPER_ADVANCED_ENDPOINT.lstrip('/')}"
         return urljoin(f"{self.base_url.rstrip('/')}/", endpoint_path)
 
 
