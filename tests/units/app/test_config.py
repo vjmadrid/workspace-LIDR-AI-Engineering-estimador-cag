@@ -4,14 +4,16 @@ import pytest
 from pydantic import ValidationError
 
 from app.config import (
+    LOG_LEVEL_MAP,
     AppEnvironment,
     DevelopmentConfig,
     LLMProvider,
-    LOG_LEVEL_MAP,
     ProductionConfig,
     Settings,
-    TestingConfig as AppTestingConfig,
     get_settings,
+)
+from app.config import (
+    TestingConfig as AppTestingConfig,
 )
 
 
@@ -40,6 +42,10 @@ def build_settings_payload(**overrides) -> dict:
         "LLM_RETRIES": "2",
         "REDIS_URL": "redis://localhost:6379",
         "CACHE_TTL": "86400",
+        "EMBEDDING_MODEL": "text-embedding-3-small",
+        "SEMANTIC_CACHE_THRESHOLD": "0.85",
+        "SEMANTIC_CACHE_TTL": "86400",
+        "SEMANTIC_CACHE_LOG_ONLY": "false",
         "OPENAI_API_KEY": "test-openai-api-key",
         "ANTHROPIC_API_KEY": "",
         "ESTIMATE_BACKEND_BASE_URL": "http://localhost:8000",
@@ -68,6 +74,10 @@ def test_settings_loads_valid_minimum_configuration_with_expected_types():
     assert settings.LLM_RETRIES == 2
     assert settings.REDIS_URL == "redis://localhost:6379"
     assert settings.CACHE_TTL == 86400
+    assert settings.EMBEDDING_MODEL == "text-embedding-3-small"
+    assert settings.SEMANTIC_CACHE_THRESHOLD == 0.85
+    assert settings.SEMANTIC_CACHE_TTL == 86400
+    assert settings.SEMANTIC_CACHE_LOG_ONLY is False
     assert settings.ESTIMATE_BACKEND_TIMEOUT_SECONDS == 10.5
 
 
@@ -97,16 +107,39 @@ def test_settings_accepts_api_key_for_selected_provider():
     assert anthropic_settings.ANTHROPIC_API_KEY == "anthropic-key"
 
 
-def test_settings_accepts_llmlite_provider_without_provider_specific_api_key():
+def test_settings_accepts_llmlite_provider_with_any_available_api_key():
     settings = build_settings(
         LLM_PROVIDER="llmlite",
-        OPENAI_API_KEY="",
+        OPENAI_API_KEY="openai-key-for-primary-model",
         ANTHROPIC_API_KEY="",
         LLMLITE_MODEL="anthropic/claude-haiku-4-5-20251001",
     )
 
     assert settings.LLM_PROVIDER == LLMProvider.LLMLITE
     assert settings.LLMLITE_MODEL == "anthropic/claude-haiku-4-5-20251001"
+
+
+def test_settings_requires_at_least_one_api_key_for_llmlite_provider():
+    with pytest.raises(ValidationError, match="At least one of OPENAI_API_KEY or ANTHROPIC_API_KEY must be set"):
+        build_settings(
+            LLM_PROVIDER="llmlite",
+            OPENAI_API_KEY="",
+            ANTHROPIC_API_KEY="",
+        )
+
+
+def test_settings_loads_semantic_cache_overrides_with_expected_types():
+    settings = build_settings(
+        EMBEDDING_MODEL="custom-embedding-model",
+        SEMANTIC_CACHE_THRESHOLD="0.92",
+        SEMANTIC_CACHE_TTL="3600",
+        SEMANTIC_CACHE_LOG_ONLY="true",
+    )
+
+    assert settings.EMBEDDING_MODEL == "custom-embedding-model"
+    assert settings.SEMANTIC_CACHE_THRESHOLD == 0.92
+    assert settings.SEMANTIC_CACHE_TTL == 3600
+    assert settings.SEMANTIC_CACHE_LOG_ONLY is True
 
 
 @pytest.mark.parametrize(

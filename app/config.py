@@ -72,6 +72,15 @@ class Settings(BaseSettings):
     REDIS_URL: str = "redis://localhost:6379"
     CACHE_TTL: int = 86400
 
+    # Semantic cache Settings
+    EMBEDDING_MODEL: str = "text-embedding-3-small"
+    SEMANTIC_CACHE_THRESHOLD: float = 0.85
+    SEMANTIC_CACHE_TTL: int = 86400
+
+    # When True, the semantic cache LOGS potential hits but does NOT serve them.
+    # Used to gather metrics before flipping the cache on in production.
+    SEMANTIC_CACHE_LOG_ONLY: bool = False
+
     # Streamlit Settings
     ESTIMATE_BACKEND_BASE_URL: str
     ESTIMATE_BACKEND_TIMEOUT_SECONDS: float
@@ -83,6 +92,15 @@ class Settings(BaseSettings):
             raise ValueError("OPENAI_API_KEY is required when LLM_PROVIDER is 'openai'")
         if self.LLM_PROVIDER == LLMProvider.ANTHROPIC and not self.ANTHROPIC_API_KEY:
             raise ValueError("ANTHROPIC_API_KEY is required when LLM_PROVIDER is 'anthropic'")
+        return self
+
+    @model_validator(mode="after")
+    def validate_at_least_one_api_key(self) -> "Settings":
+        """LiteLLM may try either provider via fallback, so we require at least one key."""
+        if not self.OPENAI_API_KEY and not self.ANTHROPIC_API_KEY:
+            raise ValueError(
+                "At least one of OPENAI_API_KEY or ANTHROPIC_API_KEY must be set"
+            )
         return self
 
     @property

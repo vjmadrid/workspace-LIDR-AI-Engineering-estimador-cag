@@ -1,3 +1,4 @@
+# Sesion 04
 """POST /api/v1/estimate — typed input, validated structured output.
 
 Error handling mapping:
@@ -26,7 +27,6 @@ from app.services.estimate_advance_services import EstimateAdvancedService
 
 # Logging Configuration
 log = structlog.get_logger()
-
 
 # Router Configuration
 router = APIRouter(prefix="/api/v1", tags=["estimations"])

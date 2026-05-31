@@ -1,3 +1,4 @@
+# Sesion 04
 """Pipeline orchestrator. Glue between guardrails, caches, prompt rendering and
 the LLM wrapper. The router holds none of this logic — its only job is to
 translate HTTP errors.
@@ -31,7 +32,7 @@ import structlog
 from app.cache.semantic import EstimationSemanticCache
 from app.guardrails.input import check_input
 from app.guardrails.output import enforce_scope_response
-from app.prompts.loader import render_estimation_prompt
+from app.prompts.loader import render_estimation_prompt_adv
 from app.schemas.estimation import EstimationRequest, EstimationResponse, EstimationResult
 from app.services.cache import EstimationCache
 from app.services.llmwrapperadvanced.llm_wrapper_advanced_services import LLMWrapper
@@ -102,7 +103,7 @@ class EstimateAdvancedService:
                 )
 
         # 4. Render the versioned prompt.
-        system_prompt, user_message = render_estimation_prompt(
+        system_prompt, user_message = render_estimation_prompt_adv(
             request, version=self.prompt_version
         )
 

@@ -1,3 +1,4 @@
+# Sesion 04
 """Input guardrails: three layers run before the LLM is called.
 
 1. Moderation (OpenAI Moderation API): blocks hate, violence, sexual content, etc.
