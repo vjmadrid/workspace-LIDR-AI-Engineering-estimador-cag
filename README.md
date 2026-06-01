@@ -131,6 +131,22 @@ N/A
   * [Repositorio](https://github.com/redis/redis-vl-python)
   * [Documentacion](https://docs.redisvl.com/en/latest/)
   * [Web](https://github.com/redis/redis-vl-python)
+* **python-multipart**: Parser multipart para streaming
+  * [Pypi](https://pypi.org/project/python-multipart/)
+  * [Repositorio](https://github.com/Kludex/python-multipart)
+  * [Documentacion](https://multipart.fastapiexpert.com/)
+  * [Web](https://github.com/Kludex/python-multipart)
+* **pypdf**: Libreria para trabajar con PDFs (splitting, merging, cropping, etc)
+  * [Pypi](https://pypi.org/project/pypdf/)
+  * [Repositorio](https://github.com/py-pdf/pypdf)
+  * [Documentacion](https://pypdf.readthedocs.io/en/latest/)
+  * [Web](https://pypdf.readthedocs.io/en/latest/)
+* **python-docx**: Libreria para trabajar con Microsoft Words
+  * [Pypi](https://pypi.org/project/python-docx/)
+  * [Repositorio](https://github.com/python-openxml/python-docx)
+  * [Documentacion](https://python-docx.readthedocs.io/en/latest/)
+  * [Web](https://github.com/python-openxml/python-docx)
+
 
 **Testing / QA**
 
@@ -223,6 +239,9 @@ uv add fakeredis
 uv add sse-starlette
 uv add instructor
 uv add redisvl
+uv add python-multipart
+uv add pypdf
+uv add python-docx
 
 # Desarrollo
 uv add --dev ruff
